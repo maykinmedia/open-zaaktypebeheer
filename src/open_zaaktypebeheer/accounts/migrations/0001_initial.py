@@ -7,7 +7,6 @@ import open_zaaktypebeheer.accounts.managers
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

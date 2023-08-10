@@ -27,7 +27,7 @@ class _UserAdmin(UserAdmin):
         user = self.get_object(request, unquote(id))
         try:
             validate_max_user_permissions(request.user, user)
-        except ValidationError as exc:
+        except ValidationError:
             raise PermissionDenied
 
         return super().user_change_password(request, id, form_url)

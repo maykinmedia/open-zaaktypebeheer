@@ -1,6 +1,5 @@
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpRequest
 from django.test import TestCase
 from django.urls import reverse
 
