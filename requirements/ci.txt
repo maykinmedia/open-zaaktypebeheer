@@ -16,8 +16,19 @@ async-timeout==4.0.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   redis
+attrs==23.1.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   glom
 beautifulsoup4==4.12.2
     # via webtest
+boltons==23.0.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   face
+    #   glom
 certifi==2023.7.22
     # via
     #   -c requirements/base.txt
@@ -25,6 +36,11 @@ certifi==2023.7.22
     #   elastic-apm
     #   requests
     #   sentry-sdk
+cffi==1.15.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   cryptography
 charset-normalizer==3.2.0
     # via
     #   -c requirements/base.txt
@@ -32,6 +48,13 @@ charset-normalizer==3.2.0
     #   requests
 coverage==4.5.4
     # via -r requirements/test-tools.in
+cryptography==41.0.3
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   josepy
+    #   mozilla-django-oidc
+    #   pyopenssl
 cssselect==1.2.0
     # via pyquery
 dill==0.3.7
@@ -49,7 +72,10 @@ django==3.2.20
     #   django-phonenumber-field
     #   django-redis
     #   django-rosetta
+    #   django-solo
     #   maykin-django-two-factor-auth
+    #   mozilla-django-oidc
+    #   mozilla-django-oidc-db
 django-admin-index==3.1.0
     # via
     #   -c requirements/base.txt
@@ -58,6 +84,11 @@ django-axes==6.1.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+django-better-admin-arrayfield==1.4.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   mozilla-django-oidc-db
 django-formtools==2.4.1
     # via
     #   -c requirements/base.txt
@@ -92,6 +123,11 @@ django-rosetta==0.9.9
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+django-solo==2.1.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   mozilla-django-oidc-db
 django-webtest==1.9.10
     # via -r requirements/test-tools.in
 ecs-logging==2.0.2
@@ -103,6 +139,11 @@ elastic-apm==6.18.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+face==20.1.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   glom
 factory-boy==3.3.0
     # via -r requirements/test-tools.in
 faker==19.3.0
@@ -111,6 +152,11 @@ flake8==6.1.0
     # via -r requirements/test-tools.in
 freezegun==1.2.2
     # via -r requirements/test-tools.in
+glom==23.3.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   mozilla-django-oidc-db
 idna==3.4
     # via
     #   -c requirements/base.txt
@@ -118,6 +164,11 @@ idna==3.4
     #   requests
 isort==5.12.0
     # via pylint
+josepy==1.13.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   mozilla-django-oidc
 lazy-object-proxy==1.9.0
     # via astroid
 lxml==4.9.3
@@ -130,6 +181,15 @@ mccabe==0.7.0
     # via
     #   flake8
     #   pylint
+mozilla-django-oidc==2.0.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   mozilla-django-oidc-db
+mozilla-django-oidc-db==0.12.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 phonenumbers==8.13.18
     # via
     #   -c requirements/base.txt
@@ -151,10 +211,20 @@ psycopg2==2.9.7
     #   -r requirements/base.txt
 pycodestyle==2.11.0
     # via flake8
+pycparser==2.21
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   cffi
 pyflakes==3.1.0
     # via flake8
 pylint==2.17.5
     # via -r requirements/test-tools.in
+pyopenssl==23.2.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   josepy
 pyquery==2.0.0
     # via -r requirements/test-tools.in
 python-dateutil==2.8.2
@@ -189,6 +259,7 @@ requests==2.31.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-rosetta
+    #   mozilla-django-oidc
     #   requests-mock
 requests-mock==1.11.0
     # via -r requirements/test-tools.in
@@ -252,3 +323,4 @@ setuptools==68.0.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-axes
+    #   josepy

@@ -12,8 +12,10 @@ django-axes
 django-hijack
 django-redis
 django-rosetta
+django-solo
 maykin-django-two-factor-auth
 phonenumbers
+mozilla-django-oidc-db
 
 # API libraries
 # djangorestframework
@@ -25,3 +27,6 @@ phonenumbers
 uwsgi
 sentry-sdk  # error monitoring
 elastic-apm  # Elastic APM integration
+
+# Admin and UI libraries
+django-better-admin-arrayfield

@@ -21,6 +21,11 @@ async-timeout==4.0.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   redis
+attrs==23.1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   glom
 babel==2.12.1
     # via sphinx
 beautifulsoup4==4.12.2
@@ -30,6 +35,12 @@ beautifulsoup4==4.12.2
     #   webtest
 black==23.7.0
     # via -r requirements/dev.in
+boltons==23.0.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   face
+    #   glom
 build==0.10.0
     # via pip-tools
 bump2version==1.0.1
@@ -41,6 +52,11 @@ certifi==2023.7.22
     #   elastic-apm
     #   requests
     #   sentry-sdk
+cffi==1.15.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   cryptography
 charset-normalizer==3.2.0
     # via
     #   -c requirements/ci.txt
@@ -56,6 +72,13 @@ coverage==4.5.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+cryptography==41.0.3
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   josepy
+    #   mozilla-django-oidc
+    #   pyopenssl
 cssselect==1.2.0
     # via
     #   -c requirements/ci.txt
@@ -84,7 +107,10 @@ django==3.2.20
     #   django-phonenumber-field
     #   django-redis
     #   django-rosetta
+    #   django-solo
     #   maykin-django-two-factor-auth
+    #   mozilla-django-oidc
+    #   mozilla-django-oidc-db
 django-admin-index==3.1.0
     # via
     #   -c requirements/ci.txt
@@ -93,6 +119,11 @@ django-axes==6.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+django-better-admin-arrayfield==1.4.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   mozilla-django-oidc-db
 django-debug-toolbar==4.1.0
     # via -r requirements/dev.in
 django-extensions==3.2.3
@@ -133,6 +164,11 @@ django-rosetta==0.9.9
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+django-solo==2.1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   mozilla-django-oidc-db
 django-webtest==1.9.10
     # via
     #   -c requirements/ci.txt
@@ -150,6 +186,11 @@ elastic-apm==6.18.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+face==20.1.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   glom
 factory-boy==3.3.0
     # via
     #   -c requirements/ci.txt
@@ -171,6 +212,11 @@ gitdb==4.0.10
     # via gitpython
 gitpython==3.1.32
     # via -r requirements/dev.in
+glom==23.3.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   mozilla-django-oidc-db
 idna==3.4
     # via
     #   -c requirements/ci.txt
@@ -186,6 +232,11 @@ isort[colors]==5.12.0
     #   pylint
 jinja2==3.1.2
     # via sphinx
+josepy==1.13.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   mozilla-django-oidc
 lazy-object-proxy==1.9.0
     # via
     #   -c requirements/ci.txt
@@ -208,6 +259,15 @@ mccabe==0.7.0
     #   -r requirements/ci.txt
     #   flake8
     #   pylint
+mozilla-django-oidc==2.0.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   mozilla-django-oidc-db
+mozilla-django-oidc-db==0.12.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 mypy-extensions==1.0.0
     # via black
 packaging==23.1
@@ -247,6 +307,11 @@ pycodestyle==2.11.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   flake8
+pycparser==2.21
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   cffi
 pyflakes==3.1.0
     # via
     #   -c requirements/ci.txt
@@ -258,6 +323,11 @@ pylint==2.17.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+pyopenssl==23.2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   josepy
 pyproject-hooks==1.0.0
     # via build
 pyquery==2.0.0
@@ -299,6 +369,7 @@ requests==2.31.0
     #   -r requirements/ci.txt
     #   ddt-api-calls
     #   django-rosetta
+    #   mozilla-django-oidc
     #   requests-mock
     #   sphinx
 requests-mock==1.11.0
@@ -425,4 +496,5 @@ setuptools==68.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-axes
+    #   josepy
     #   pip-tools

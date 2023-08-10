@@ -7,6 +7,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 
+from mozilla_django_oidc_db.views import AdminLoginFailure
+
 from open_zaaktypebeheer.accounts.views.password_reset import PasswordResetView
 
 handler500 = "open_zaaktypebeheer.utils.views.server_error"
@@ -25,6 +27,7 @@ urlpatterns = [
         auth_views.PasswordResetDoneView.as_view(),
         name="password_reset_done",
     ),
+    path("admin/login/failure/", AdminLoginFailure.as_view(), name="admin-oidc-error"),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
     path(
@@ -37,6 +40,7 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    path("oidc/", include("mozilla_django_oidc.urls")),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html"), name="root"),
 ]
