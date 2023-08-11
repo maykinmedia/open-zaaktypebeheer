@@ -41,6 +41,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("oidc/", include("mozilla_django_oidc.urls")),
+    path("api/", include("open_zaaktypebeheer.api.urls", namespace="api")),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html"), name="root"),
 ]
