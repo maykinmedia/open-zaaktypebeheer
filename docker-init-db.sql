@@ -1,4 +1,3 @@
-CREATE USER {{ project_name|lower }};
-CREATE DATABASE {{ project_name|lower }};
-GRANT ALL PRIVILEGES ON DATABASE {{ project_name|lower }} TO {{ project_name|lower }};
+CREATE USER open_zaaktypebeheer;
+CREATE DATABASE open_zaaktypebeheer OWNER open_zaaktypebeheer;
 

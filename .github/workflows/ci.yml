@@ -1,4 +1,4 @@
-name: Run build pipeline
+name: Run CI
 
 # Run this workflow every time a new commit pushed to your repository
 on:
@@ -31,6 +31,7 @@ jobs:
         # Needed because the postgres container does not provide a healthcheck
         options:
           --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+          --name postgres
       redis:
         image: redis:6
         ports:
@@ -40,12 +41,12 @@ jobs:
       - name: Set up backend environment
         uses: maykinmedia/setup-django-backend@v1
         with:
-          python-version: '3.10.9'
+          apt-packages: 'gettext postgresql-client'
+          python-version: '3.10'
           optimize-postgres: 'yes'
           pg-service: 'postgres'
           setup-node: 'yes'
-          # apt-packages: 'gettext postgresql-client'  # the default
-          # npm-ci-flags: '--legacy-peer-deps' -> preferably use a .npmrc file
+          npm-ci-flags: '--legacy-peer-deps'
 
       # Any additional services -> create docker-compose setups in a (new) `docker`
       # subdirectory.
@@ -60,6 +61,7 @@ jobs:
           python src/manage.py collectstatic --noinput --link
           coverage run src/manage.py test src
         env:
+          DJANGO_SETTINGS_MODULE: open_zaaktypebeheer.conf.ci
           SECRET_KEY: dummy
           DB_USER: postgres
           DB_PASSWORD: ''

@@ -1,25 +1,58 @@
-# Inspired by https://docs.docker.com/compose/django/
+#
+# DISCLAIMER: THIS IS FOR DEVELOPMENT PURPOSES ONLY AND NOT SUITABLE FOR PRODUCTION.
+#
 version: '3'
 
 services:
   db:
-    # NOTE: No persistance storage configured.
+    # NOTE: No persistence storage configured.
     # See: https://hub.docker.com/_/postgres/
     image: postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
     # NOTE: this works for bitnami, not sure if this works for regular
     # postgres image
     volumes:
       - ./docker-init-db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - db:/var/lib/postgresql/data
+    networks:
+      - open-zaaktypebeheer-dev
+
+  redis:
+    image: redis:6
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - data:/data
+    networks:
+      - open-zaaktypebeheer-dev
 
   web:
     build: .
     environment:
       - DJANGO_SETTINGS_MODULE=open_zaaktypebeheer.conf.docker
       - SECRET_KEY=${SECRET_KEY:-django-insecure-!bkx+tx18&lvp(@_9)9ut(y(keqho*zhz1&^sqqgq9*i=__w(}
+      - DB_NAME=open_zaaktypebeheer
+      - DB_USER=open_zaaktypebeheer
+      - DB_HOST=db
+      - CACHE_DEFAULT=redis:6379/0
+      - CACHE_AXES=redis:6379/0
+      - CACHE_OIDC=redis:6379/0
+      - ALLOWED_HOSTS=*
     ports:
       - 8000:8000
     depends_on:
       - db
+      - redis
+    networks:
+      - open-zaaktypebeheer-dev
+
+volumes:
+  db:
+  data:
+
+networks:
+  open-zaaktypebeheer-dev:
+    name: open-zaaktypebeheer-dev
 
 # See: src/open_zaaktypebeheer/conf/docker.py
 # Optional containers below:
@@ -33,9 +66,3 @@ services:
 #      - cluster.routing.allocation.disk.threshold_enabled=false
 #    ports:
 #      - 9200:9200
-#  redis:
-#    # NOTE: No persistence storage configured.
-#    # See: https://hub.docker.com/_/redis/
-#    image: redis
-#    ports:
-#        - 6379:6379

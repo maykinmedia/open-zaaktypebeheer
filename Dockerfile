@@ -24,7 +24,7 @@ RUN pip install -r requirements/production.txt
 
 
 # Stage 2 - Install frontend deps and build assets
-FROM node:13-buster AS frontend-build
+FROM node:18-bookworm-slim AS frontend-build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
@@ -70,6 +70,9 @@ COPY ./bin/docker_start.sh /start.sh
 RUN mkdir /app/log
 RUN mkdir /app/media
 
+RUN useradd -M -u 1000 maykin
+RUN chown -R maykin:maykin /app
+
 VOLUME ["/app/log", "/app/media"]
 
 # copy backend build deps
@@ -85,7 +88,6 @@ COPY --from=frontend-build /app/src/open_zaaktypebeheer/static /app/src/open_zaa
 # copy source code
 COPY ./src /app/src
 
-RUN useradd -M -u 1000 maykin
 RUN chown -R maykin:maykin /app
 
 # drop privileges
@@ -102,7 +104,7 @@ ENV RELEASE=${RELEASE} \
 ARG SECRET_KEY=dummy
 
 LABEL org.label-schema.vcs-ref=$COMMIT_HASH \
-      org.label-schema.vcs-url="https://bitbucket.org/maykinmedia/open_zaaktypebeheer" \
+      org.label-schema.vcs-url="https://github.com/maykinmedia/open-zaaktypebeheer" \
       org.label-schema.version=$RELEASE \
       org.label-schema.name="open_zaaktypebeheer"
 
