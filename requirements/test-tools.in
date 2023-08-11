@@ -6,8 +6,12 @@ django-jenkins
 django-webtest
 factory-boy
 freezegun
-flake8
 pylint
 pyquery  # integrates with webtest
 requests-mock
 tblib
+
+# Code formatting
+black
+isort[colors]
+flake8

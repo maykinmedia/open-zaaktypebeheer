@@ -34,7 +34,9 @@ beautifulsoup4==4.12.2
     #   -r requirements/ci.txt
     #   webtest
 black==23.7.0
-    # via -r requirements/dev.in
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 boltons==23.0.0
     # via
     #   -c requirements/ci.txt
@@ -64,10 +66,15 @@ charset-normalizer==3.2.0
     #   requests
 click==8.1.6
     # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
     #   black
     #   pip-tools
 colorama==0.4.6
-    # via isort
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   isort
 coverage==4.5.4
     # via
     #   -c requirements/ci.txt
@@ -228,7 +235,6 @@ isort[colors]==5.12.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   -r requirements/dev.in
     #   pylint
 jinja2==3.1.2
     # via sphinx
@@ -269,14 +275,22 @@ mozilla-django-oidc-db==0.12.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
 mypy-extensions==1.0.0
-    # via black
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   black
 packaging==23.1
     # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
     #   black
     #   build
     #   sphinx
 pathspec==0.11.2
-    # via black
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   black
 phonenumbers==8.13.18
     # via
     #   -c requirements/ci.txt
