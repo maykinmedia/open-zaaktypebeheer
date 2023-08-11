@@ -18,10 +18,10 @@ phonenumbers
 mozilla-django-oidc-db
 
 # API libraries
-# djangorestframework
-# django-extra-fields
-# django-filter
-# drf-yasg  # api documentation
+djangorestframework
+
+# API schema generation
+drf-spectacular
 
 # WSGI servers & monitoring - production oriented
 uwsgi
