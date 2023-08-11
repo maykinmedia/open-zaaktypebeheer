@@ -7,7 +7,7 @@ Open-Zaaktypebeheer
 :Keywords: ``open-zaaktype``
 :PythonVersion: 3.10
 
-|build-status| |requirements|
+|build-status| |code-quality| |black|
 
 ``<oneliner describing the project>``
 
