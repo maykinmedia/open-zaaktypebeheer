@@ -504,19 +504,6 @@ throttle_rate_anon = (
 throttle_rate_user = (
     config("THROTTLE_RATE_USER", default="15000/hour") if ENABLE_THROTTLING else None
 )
-throttle_rate_polling = (
-    config("THROTTLE_RATE_POLLING", default="50000/hour") if ENABLE_THROTTLING else None
-)
-throttle_rate_pause = (
-    config("OPEN_ZAAKTYPEBEHEER_API_PAUSE_RATE_LIMIT", default="3/minute")
-    if ENABLE_THROTTLING
-    else None
-)
-throttle_rate_submit = (
-    config("OPEN_ZAAKTYPEBEHEER_API_SUBMIT_RATE_LIMIT", default="10/minute")
-    if ENABLE_THROTTLING
-    else None
-)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -532,11 +519,6 @@ REST_FRAMEWORK = {
         # used by regular throttle classes
         "anon": throttle_rate_anon,
         "user": throttle_rate_user,
-        # used by custom throttle class
-        "polling": throttle_rate_polling,
-        # restricted rates for pausing and submitting forms
-        "pause": throttle_rate_pause,
-        "submit": throttle_rate_submit,
     },
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
