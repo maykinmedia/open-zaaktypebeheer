@@ -120,6 +120,8 @@ INSTALLED_APPS = [
     "hijack",
     "hijack.contrib.admin",
     "solo",
+    "rest_framework",
+    "drf_spectacular",
     # Project applications.
     "open_zaaktypebeheer.accounts",
     "open_zaaktypebeheer.utils",
@@ -152,7 +154,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [DJANGO_PROJECT_DIR / "templates"],
-        "APP_DIRS": False,  # conflicts with explicity specifying the loaders
+        "APP_DIRS": False,  # conflicts with explicitly specifying the loaders
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -490,3 +492,50 @@ MOZILLA_DJANGO_OIDC_DB_CACHE_TIMEOUT = 1
 #
 SOLO_CACHE = "default"
 SOLO_CACHE_TIMEOUT = 60 * 5  # 5 mins
+
+#
+# DJANGO REST FRAMEWORK
+#
+ENABLE_THROTTLING = config("ENABLE_THROTTLING", default=True)
+
+throttle_rate_anon = (
+    config("THROTTLE_RATE_ANON", default="2500/hour") if ENABLE_THROTTLING else None
+)
+throttle_rate_user = (
+    config("THROTTLE_RATE_USER", default="15000/hour") if ENABLE_THROTTLING else None
+)
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_THROTTLE_CLASSES": (
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle",
+    ),
+    "DEFAULT_THROTTLE_RATES": {
+        # used by regular throttle classes
+        "anon": throttle_rate_anon,
+        "user": throttle_rate_user,
+    },
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+#
+# SPECTACULAR - OpenAPI schema generation
+#
+_DESCRIPTION = """
+Open Zaaktypebeheer provides an API to manage relating document types and case types
+(in Dutch: informatieobjecttypen en zaaktypen).
+"""
+
+API_VERSION = "0.1.0"
+
+SPECTACULAR_SETTINGS = {
+    "SCHEMA_PATH_PREFIX": "/api/v1",
+    "TITLE": "Open Zaaktypebeheer API",
+    "DESCRIPTION": _DESCRIPTION,
+    "VERSION": API_VERSION,
+}
