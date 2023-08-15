@@ -3,9 +3,11 @@ from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .authentication import AnonCSRFSessionAuthentication
 from .serializer import AuthSerializer
 
 
@@ -16,10 +18,11 @@ from .serializer import AuthSerializer
     },
 )
 class LoginView(APIView):
+    authentication_classes = (AnonCSRFSessionAuthentication,)
     permission_classes = ()
     serializer_class = AuthSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         serializer = self.serializer_class(
             data=request.data, context={"request": request}
         )
@@ -36,7 +39,7 @@ class LoginView(APIView):
     },
 )
 class LogoutView(APIView):
-    def post(self, request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         logout(request)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
