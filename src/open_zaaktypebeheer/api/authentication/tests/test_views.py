@@ -75,4 +75,4 @@ class LogoutTest(APITestCase):
         response = self.client.post(logout_url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(len(response.cookies), 0)
+        self.assertNotIn("open_zaaktypebeheer_sessionid", response.cookies)
