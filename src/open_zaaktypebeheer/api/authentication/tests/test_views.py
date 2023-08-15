@@ -41,3 +41,22 @@ class LoginTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertIn("open_zaaktypebeheer_sessionid", response.cookies)
+
+
+class LogoutTest(APITestCase):
+    def test_not_authenticated(self):
+        logout_url = reverse("api:authentication:logout")
+
+        response = self.client.post(logout_url)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_happy_flow(self):
+        logout_url = reverse("api:authentication:logout")
+        user = UserFactory.create(username="test", password="test")
+        self.client.force_authenticate(user=user)
+
+        response = self.client.post(logout_url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(response.cookies), 0)
