@@ -2,13 +2,29 @@ from django.test import override_settings
 
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
 
 from open_zaaktypebeheer.accounts.tests.factories import UserFactory
 
 
+class CSRFAPIClient(APIClient):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("enforce_csrf_checks", True)
+        super().__init__(*args, **kwargs)
+
+
 @override_settings(LANGUAGE_CODE="en")
 class LoginTests(APITestCase):
+    def test_no_csrf_token(self):
+        login_url = reverse("api:authentication:login")
+
+        client = CSRFAPIClient()
+
+        response = client.post(login_url, data={})
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.json()["detail"], "CSRF Failed: CSRF cookie not set.")
+
     def test_no_credentials_given(self):
         login_url = reverse("api:authentication:login")
 
