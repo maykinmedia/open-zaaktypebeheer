@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -22,4 +22,7 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    pass
+    def post(self, request, *args, **kwargs):
+        logout(request)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
