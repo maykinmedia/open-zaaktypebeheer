@@ -36,6 +36,7 @@ django==3.2.20
     #   -r requirements/base.in
     #   django-admin-index
     #   django-axes
+    #   django-cors-headers
     #   django-formtools
     #   django-hijack
     #   django-otp
@@ -56,6 +57,8 @@ django-better-admin-arrayfield==1.4.2
     # via
     #   -r requirements/base.in
     #   mozilla-django-oidc-db
+django-cors-headers==4.2.0
+    # via -r requirements/base.in
 django-formtools==2.4.1
     # via maykin-django-two-factor-auth
 django-hijack==3.4.1
