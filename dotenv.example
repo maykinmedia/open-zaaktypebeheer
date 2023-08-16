@@ -8,3 +8,5 @@ DB_USER="open_zaaktypebeheer"
 DB_PASSWORD=""
 DB_HOST=""
 DB_PORT=""
+
+CORS_ALLOWED_ORIGINS=http://localhost:5173
