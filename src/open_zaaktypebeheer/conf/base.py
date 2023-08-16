@@ -5,6 +5,7 @@ from pathlib import Path
 from django.urls import reverse_lazy
 
 import sentry_sdk
+from corsheaders.defaults import default_headers
 
 from .utils import config, get_sentry_integrations
 
@@ -122,6 +123,7 @@ INSTALLED_APPS = [
     "solo",
     "rest_framework",
     "drf_spectacular",
+    "corsheaders",
     # Project applications.
     "open_zaaktypebeheer.accounts",
     "open_zaaktypebeheer.utils",
@@ -131,6 +133,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     # 'django.middleware.locale.LocaleMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "open_zaaktypebeheer.middleware.CsrfTokenMiddleware",
@@ -540,3 +543,38 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": _DESCRIPTION,
     "VERSION": API_VERSION,
 }
+
+#
+# Django CORS-headers
+#
+
+# This is reflected in the access-control-allow-origin header
+# An origin is the scheme (http/https) + the domain name + port number
+CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", split=True, default=[])
+CORS_ALLOWED_ORIGIN_REGEXES = config(
+    "CORS_ALLOWED_ORIGIN_REGEXES", split=True, default=[]
+)
+CORS_ALLOW_ALL_ORIGINS = config("CORS_ALLOW_ALL_ORIGINS", default=False)
+
+# This is reflected in the Access-Control-Allow-Headers response header.
+# It is used in response to a preflight request to indicate which headers can be included in the actual request.
+CORS_EXTRA_ALLOW_HEADERS = config("CORS_EXTRA_ALLOW_HEADERS", split=True, default=[])
+CORS_ALLOW_HEADERS = (
+    *default_headers,
+    *CORS_EXTRA_ALLOW_HEADERS,
+)
+
+# Reflected in the Access-Control-Expose-Headers header
+# Specifies which response headers are exposed to JS in cross-origin requests.
+CORS_EXPOSE_HEADERS = ["X-CSRFToken"]
+
+# Reflected in the Access-Control-Allow-Credentials header.
+# This response header tells the browser whether to expose the response to the JS when the request's credentials mode
+# is 'include'. When used in a preflight response, it tells whether to send credentials (in our case, the cookies).
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS",
+    split=True,
+    default=[],
+)

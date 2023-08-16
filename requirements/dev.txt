@@ -107,6 +107,7 @@ django==3.2.20
     #   ddt-api-calls
     #   django-admin-index
     #   django-axes
+    #   django-cors-headers
     #   django-debug-toolbar
     #   django-extensions
     #   django-formtools
@@ -135,6 +136,10 @@ django-better-admin-arrayfield==1.4.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   mozilla-django-oidc-db
+django-cors-headers==4.2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 django-debug-toolbar==4.1.0
     # via -r requirements/dev.in
 django-extensions==3.2.3

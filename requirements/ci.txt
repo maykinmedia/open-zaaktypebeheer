@@ -73,6 +73,7 @@ django==3.2.20
     #   -r requirements/base.txt
     #   django-admin-index
     #   django-axes
+    #   django-cors-headers
     #   django-formtools
     #   django-hijack
     #   django-jenkins
@@ -99,6 +100,10 @@ django-better-admin-arrayfield==1.4.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   mozilla-django-oidc-db
+django-cors-headers==4.2.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 django-formtools==2.4.1
     # via
     #   -c requirements/base.txt
