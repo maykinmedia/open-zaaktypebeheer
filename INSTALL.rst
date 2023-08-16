@@ -18,10 +18,10 @@ Prerequisites
 
 You need the following libraries and/or programs:
 
-* `Python`_ 3.6 or above
+* `Python`_ 3.10
 * Python `Virtualenv`_ and `Pip`_
-* `PostgreSQL`_ 10 or above
-* `Node.js`_
+* `PostgreSQL`_ 14
+* `Node.js`_ 16 or above
 * `npm`_
 
 .. _Python: https://www.python.org/
@@ -38,16 +38,16 @@ Getting started
 Developers can follow the following steps to set up the project on their local
 development machine.
 
-1. Navigate to the location where you want to place your project.
+#. Navigate to the location where you want to place your project.
 
-2. Get the code:
+#. Get the code:
 
    .. code-block:: bash
 
        $ git clone git@bitbucket.org:maykinmedia/open_zaaktypebeheer.git
        $ cd open_zaaktypebeheer
 
-3. Install all required (backend) libraries.
+#. Install all required (backend) libraries.
    **Tip:** You can use the ``bootstrap.py`` script to install the requiments
    and set the proper settings in ``manage.py``. Or, perform the steps
    manually:
@@ -58,34 +58,42 @@ development machine.
        $ source env/bin/activate
        $ pip install -r requirements/dev.txt
 
-4. Install all required (frontend) libraries and build static files.
+#. Create a postgres database
+
+#. Create the initial database tables:
+
+   .. code-block:: bash
+
+       $ python src/manage.py migrate
+
+#. Create a superuser to access the management interface:
+
+   .. code-block:: bash
+
+       $ python src/manage.py createsuperuser
+
+#. Collect the static files:
+
+   .. code-block:: bash
+
+       $ python src/manage.py collectstatic --link
+
+#. Install all required (frontend) libraries and build static files.
 
    .. code-block:: bash
 
        $ npm install
        $ npm run build
 
-5. Collect statics and create the initial database tables:
-
-   .. code-block:: bash
-
-       $ python src/manage.py collectstatic --link
-       $ python src/manage.py migrate
-
-6. Create a superuser to access the management interface:
-
-   .. code-block:: bash
-
-       $ python src/manage.py createsuperuser
-
-7. You can now run your installation and point your browser to the address
+#. You can now run your installation and point your browser to the address
    given by this command:
 
    .. code-block:: bash
 
        $ python src/manage.py runserver
 
-8. Create a .env file with database settings. See dotenv.example for an example.
+#. Create a .env file with database settings. See dotenv.example for an example.
+   Remember to configure the ``CORS_ALLOWED_ORIGINS`` with the origin of the frontend (single page app).
 
         $ cp dotenv.example .env
 
@@ -100,14 +108,14 @@ Update installation
 
 When updating an existing installation:
 
-1. Activate the virtual environment:
+#. Activate the virtual environment:
 
    .. code-block:: bash
 
        $ cd open_zaaktypebeheer
        $ source env/bin/activate
 
-2. Update the code and libraries:
+#. Update the code and libraries:
 
    .. code-block:: bash
 
@@ -116,7 +124,7 @@ When updating an existing installation:
        $ npm install
        $ npm run build
 
-3. Update the statics and database:
+#. Update the statics and database:
 
    .. code-block:: bash
 
@@ -151,13 +159,14 @@ file or as part of the ``(post)activate`` of your virtualenv.
 * ``SENTRY_DSN``: the DSN of the project in Sentry. If set, enabled Sentry SDK as
   logger and will send errors/logging to Sentry. If unset, Sentry SDK will be
   disabled.
+* ``CORS_ALLOWED_ORIGINS``: the origin of the frontend. For example, ``http://localhost:5173``.
 
 Docker
 ======
 
 The easiest way to get the project started is by using `Docker Compose`_.
 
-1. Clone or download the code from `Github`_ in a folder like
+#. Clone or download the code from `Github`_ in a folder like
    ``open_zaaktypebeheer``:
 
    .. code-block:: bash
@@ -168,13 +177,15 @@ The easiest way to get the project started is by using `Docker Compose`_.
 
        $ cd open_zaaktypebeheer
 
-2. Start the database and web services:
+#. Start the database and web services.
+   Remember to configure the ``CORS_ALLOWED_ORIGINS`` setting in the ``docker-compose.yml`` file. It is ``http://localhost:5173`` by default.
 
    .. code-block:: bash
 
-       $ docker-compose up -d
-       Starting open_zaaktypebeheer_db_1 ... done
-       Starting open_zaaktypebeheer_web_1 ... done
+       $ docker-compose up
+       Starting open-zaaktypebeheer_db_1    ... done
+       Starting open-zaaktypebeheer_redis_1 ... done
+       Starting open-zaaktypebeheer_web_1   ... done
 
    It can take a while before everything is done. Even after starting the web
    container, the database might still be migrating. You can always check the
@@ -184,7 +195,7 @@ The easiest way to get the project started is by using `Docker Compose`_.
 
        $ docker logs -f open_zaaktypebeheer_web_1
 
-3. Create an admin user and load initial data. If different container names
+#. Create an admin user and load initial data. If different container names
    are shown above, use the container name ending with ``_web_1``:
 
    .. code-block:: bash
@@ -197,8 +208,8 @@ The easiest way to get the project started is by using `Docker Compose`_.
        $ docker exec -it open_zaaktypebeheer_web_1 /app/src/manage.py loaddata admin_index groups
        Installed 5 object(s) from 2 fixture(s)
 
-4. Point your browser to ``http://localhost:8000/`` to access the project's
-   management interface with the credentials used in step 3.
+#. Point your browser to ``http://localhost:8000/`` to access the project's
+   management interface with the credentials used in step #.
 
    If you are using ``Docker Machine``, you need to point your browser to the
    Docker VM IP address. You can get the IP address by doing
@@ -212,7 +223,7 @@ The easiest way to get the project started is by using `Docker Compose`_.
        NAME      ACTIVE   DRIVER       STATE     URL
        default   *        virtualbox   Running   tcp://<ip>:<port>
 
-5. To shutdown the services, use ``docker-compose down`` and to clean up your
+#. To shutdown the services, use ``docker-compose down`` and to clean up your
    system you can run ``docker system prune``.
 
 .. _Docker Compose: https://docs.docker.com/compose/install/
@@ -267,21 +278,21 @@ Staging and production
 Ansible is used to deploy test, staging and production servers. It is assumed
 the target machine has a clean `Debian`_ installation.
 
-1. Make sure you have `Ansible`_ installed (globally or in the virtual
+#. Make sure you have `Ansible`_ installed (globally or in the virtual
    environment):
 
    .. code-block:: bash
 
        $ pip install ansible
 
-2. Navigate to the project directory, and install the Maykin deployment
+#. Navigate to the project directory, and install the Maykin deployment
    submodule if you haven't already:
 
    .. code-block:: bash
 
        $ git submodule update --init
 
-3. Run the Ansible playbook to provision a clean Debian machine:
+#. Run the Ansible playbook to provision a clean Debian machine:
 
    .. code-block:: bash
 
