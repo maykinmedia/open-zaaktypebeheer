@@ -124,6 +124,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "corsheaders",
+    "zgw_consumers",
+    "simple_certmanager",
     # Project applications.
     "open_zaaktypebeheer.accounts",
     "open_zaaktypebeheer.utils",
@@ -578,3 +580,8 @@ CSRF_TRUSTED_ORIGINS = config(
     split=True,
     default=[],
 )
+
+#
+# ZGW consumers
+#
+# ZGW_CONSUMERS_OAS_CACHE = "django_redis.cache.RedisCache"

@@ -31,3 +31,7 @@ elastic-apm  # Elastic APM integration
 
 # Admin and UI libraries
 django-better-admin-arrayfield
+
+# ZGW APIs
+zgw-consumers
+
