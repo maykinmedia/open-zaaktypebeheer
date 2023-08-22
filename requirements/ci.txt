@@ -37,6 +37,7 @@ certifi==2023.7.22
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   django-simple-certmanager
     #   elastic-apm
     #   requests
     #   sentry-sdk
@@ -60,6 +61,7 @@ cryptography==41.0.3
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   django-simple-certmanager
     #   josepy
     #   mozilla-django-oidc
     #   pyopenssl
@@ -79,14 +81,19 @@ django==3.2.20
     #   django-jenkins
     #   django-otp
     #   django-phonenumber-field
+    #   django-privates
     #   django-redis
+    #   django-relativedelta
     #   django-rosetta
+    #   django-sendfile2
+    #   django-simple-certmanager
     #   django-solo
     #   djangorestframework
     #   drf-spectacular
     #   maykin-django-two-factor-auth
     #   mozilla-django-oidc
     #   mozilla-django-oidc-db
+    #   zgw-consumers
 django-admin-index==3.1.0
     # via
     #   -c requirements/base.txt
@@ -130,19 +137,40 @@ django-phonenumber-field==5.2.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   maykin-django-two-factor-auth
+django-privates==2.0.0.post0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-simple-certmanager
 django-redis==5.3.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+django-relativedelta==2.0.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   zgw-consumers
 django-rosetta==0.9.9
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+django-sendfile2==0.7.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-privates
+django-simple-certmanager==1.3.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   zgw-consumers
 django-solo==2.1.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   mozilla-django-oidc-db
+    #   zgw-consumers
 django-webtest==1.9.10
     # via -r requirements/test-tools.in
 djangorestframework==3.14.0
@@ -171,11 +199,20 @@ face==20.1.1
 factory-boy==3.3.0
     # via -r requirements/test-tools.in
 faker==19.3.0
-    # via factory-boy
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   factory-boy
+    #   zgw-consumers
 flake8==6.1.0
     # via -r requirements/test-tools.in
 freezegun==1.2.2
     # via -r requirements/test-tools.in
+gemma-zds-client==2.0.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   zgw-consumers
 glom==23.3.0
     # via
     #   -c requirements/base.txt
@@ -267,17 +304,27 @@ pycparser==2.21
     #   cffi
 pyflakes==3.1.0
     # via flake8
+pyjwt==2.8.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   gemma-zds-client
 pylint==2.17.5
     # via -r requirements/test-tools.in
 pyopenssl==23.2.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   django-simple-certmanager
     #   josepy
+    #   zgw-consumers
 pyquery==2.0.0
     # via -r requirements/test-tools.in
 python-dateutil==2.8.2
     # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-relativedelta
     #   faker
     #   freezegun
 python-decouple==3.8
@@ -299,6 +346,7 @@ pyyaml==6.0.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   drf-spectacular
+    #   gemma-zds-client
 qrcode==6.1
     # via
     #   -c requirements/base.txt
@@ -320,10 +368,16 @@ requests==2.31.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-rosetta
+    #   gemma-zds-client
     #   mozilla-django-oidc
     #   requests-mock
+    #   zgw-consumers
 requests-mock==1.11.0
-    # via -r requirements/test-tools.in
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   -r requirements/test-tools.in
+    #   zgw-consumers
 rpds-py==0.9.2
     # via
     #   -c requirements/base.txt
@@ -390,6 +444,10 @@ wrapt==1.15.0
     #   -r requirements/base.txt
     #   astroid
     #   elastic-apm
+zgw-consumers==0.26.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==68.0.0

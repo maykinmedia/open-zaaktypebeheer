@@ -31,6 +31,10 @@
             [
                 "mozilla_django_oidc_db",
                 "openidconnectconfig"
+            ],
+            [
+                "zgw_consumers",
+                "service"
             ]
         ]
     }
