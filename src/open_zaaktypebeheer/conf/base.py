@@ -584,4 +584,6 @@ CSRF_TRUSTED_ORIGINS = config(
 #
 # ZGW consumers
 #
-# ZGW_CONSUMERS_OAS_CACHE = "django_redis.cache.RedisCache"
+ZGW_CONSUMERS_TEST_SCHEMA_DIRS = [
+    os.path.join(BASE_DIR, "src/open_zaaktypebeheer/api/catalogi/tests/files")
+]
