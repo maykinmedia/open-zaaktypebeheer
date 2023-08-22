@@ -34,6 +34,10 @@ urlpatterns = [
         include(
             "open_zaaktypebeheer.api.authentication.urls", namespace="authentication"
         ),
-    )
+    ),
     # Actual endpoints
+    path(
+        "v1/users/",
+        include("open_zaaktypebeheer.api.users.urls", namespace="users"),
+    ),
 ]
