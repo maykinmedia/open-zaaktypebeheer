@@ -8,6 +8,7 @@ factory-boy
 freezegun
 pylint
 pyquery  # integrates with webtest
+pytest  # documentation tests
 requests-mock
 tblib
 
