@@ -48,13 +48,6 @@ jobs:
           setup-node: 'yes'
           npm-ci-flags: '--legacy-peer-deps'
 
-      # Any additional services -> create docker-compose setups in a (new) `docker`
-      # subdirectory.
-      # - name: Start CI docker services
-      #   run: |
-      #     docker-compose -f docker-compose.ci.yml up -d
-      #   working-directory: docker
-
       - name: Run tests
         run: |
           python src/manage.py compilemessages
@@ -81,28 +74,26 @@ jobs:
       #     path: openapi.yaml
       #     retention-days: 1
 
-  # docs:
-  #   name: Build and check documentation
-  #   runs-on: ubuntu-latest
+  docs:
+   name: Build and check documentation
+   runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-python@v4
-  #       with:
-  #         python-version: '3.9'
+   steps:
+     - uses: actions/checkout@v3
+       with:
+         path: open-zaaktypebeheer
 
-  #     # - name: Install OS dependencies
-  #     #   run: |
-  #     #     sudo apt-get update
-  #     #     sudo apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+     - name: Set up backend environment
+       uses: maykinmedia/setup-django-backend@v1
+       with:
+         apt-packages: 'gettext postgresql-client'
+         python-version: '3.10'
+         setup-node: 'no'
+         working-directory: open-zaaktypebeheer
 
-  #     - name: Install dependencies
-  #       run: |
-  #         pip install -r requirements/ci.txt
-
-  #     - name: Build and test docs
-  #       working-directory: docs
-  #       run: pytest check_sphinx.py -v --tb=auto
+     - name: Build and test docs
+       run: pytest check_sphinx.py -v --tb=auto
+       working-directory: open-zaaktypebeheer/docs
 
   docker_build:
     name: Build Docker image

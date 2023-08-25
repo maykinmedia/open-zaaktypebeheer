@@ -8,7 +8,7 @@ To test logging in with OIDC, we can use Keycloak. Keycloak can be run locally w
 
 You can use the following ``docker-compose.yml`` file to run the Keycloak container (plus a postgres database).
 
-.. literalinclude:: assets/docker-compose-keycloak.yaml
+.. literalinclude:: _assets/docker-compose-keycloak.yaml
    :language: yaml
 
 Once the containers are up and running, execute the following command:
@@ -61,7 +61,7 @@ Keycloak configuration
 Open Zaaktypebeheer Admin configuration
 =======================================
 
-Follow the :ref:`general instructions to enable OIDC <configure_oidc>`.
+Follow the general :ref:`configure_oidc` instructions.
 
 Use the following values:
 

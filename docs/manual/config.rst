@@ -1,10 +1,10 @@
-.. _install_config:
+.. _manual_config:
 
 =============
 Configuration
 =============
 
-.. _`configure_oidc`
+.. _`configure_oidc`:
 
 Configuring OIDC
 ================
