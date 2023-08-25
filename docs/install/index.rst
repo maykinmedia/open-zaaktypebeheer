@@ -10,6 +10,7 @@ development, staging and production environments.
 .. toctree::
     :maxdepth: 2
 
+    config
     development
     staging
     production
