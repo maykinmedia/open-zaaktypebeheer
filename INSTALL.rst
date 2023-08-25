@@ -58,7 +58,8 @@ development machine.
        $ source env/bin/activate
        $ pip install -r requirements/dev.txt
 
-#. Create a postgres database
+#. Create a postgres database. The database name should be ``open_zaaktypebeheer`` and it should be owned by a user/role
+   with name ``open_zaaktypebeheer`` and password ``open_zaaktypebeheer``.
 
 #. Create the initial database tables:
 
