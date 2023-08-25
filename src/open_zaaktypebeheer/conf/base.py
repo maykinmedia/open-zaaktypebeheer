@@ -492,6 +492,9 @@ OIDC_AUTHENTICATE_CLASS = "mozilla_django_oidc_db.views.OIDCAuthenticationReques
 OIDC_CALLBACK_CLASS = "mozilla_django_oidc_db.views.OIDCCallbackView"
 MOZILLA_DJANGO_OIDC_DB_CACHE = "oidc"
 MOZILLA_DJANGO_OIDC_DB_CACHE_TIMEOUT = 1
+OIDC_REDIRECT_ALLOWED_HOSTS = config(
+    "OIDC_REDIRECT_ALLOWED_HOSTS", split=True, default=[]
+)
 
 #
 # SOLO

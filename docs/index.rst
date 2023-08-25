@@ -1,10 +1,10 @@
 .. _index:
 
 ===================
-
+Open Zaaktypebeheer
 ===================
 
-Welcome to the documentation for the  project.
+Welcome to the documentation for the Open Zaaktypebeheer project.
 
 
 Documentation
@@ -15,4 +15,5 @@ Documentation
 
     general/index
     coding_style/index
+    developers/index
     testing
