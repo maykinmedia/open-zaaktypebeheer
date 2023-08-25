@@ -9,4 +9,5 @@ This section contains information that could be useful for developers working on
 .. toctree::
     :maxdepth: 2
 
+    install
     oidc

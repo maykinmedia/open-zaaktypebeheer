@@ -161,6 +161,8 @@ file or as part of the ``(post)activate`` of your virtualenv.
   logger and will send errors/logging to Sentry. If unset, Sentry SDK will be
   disabled.
 * ``CORS_ALLOWED_ORIGINS``: the origin of the frontend. For example, ``http://localhost:5173``.
+* ``OIDC_REDIRECT_ALLOWED_HOSTS``: the hosts to which OIDC can redirect. For example, ``localhost:5173``.
+* ``CSRF_TRUSTED_ORIGINS``: A list of trusted origins for unsafe requests (e.g. POST). For example, ``http://localhost:5173``.
 
 Docker
 ======
@@ -179,7 +181,8 @@ The easiest way to get the project started is by using `Docker Compose`_.
        $ cd open_zaaktypebeheer
 
 #. Start the database and web services.
-   Remember to configure the ``CORS_ALLOWED_ORIGINS`` setting in the ``docker-compose.yml`` file. It is ``http://localhost:5173`` by default.
+   Remember to configure the ``CORS_ALLOWED_ORIGINS`` and ``OIDC_REDIRECT_ALLOWED_HOSTS`` setting in the ``docker-compose.yml`` file.
+   These are ``http://localhost:5173`` and ``localhost:5173`` respectively by default.
 
    .. code-block:: bash
 
@@ -228,7 +231,7 @@ The easiest way to get the project started is by using `Docker Compose`_.
    system you can run ``docker system prune``.
 
 .. _Docker Compose: https://docs.docker.com/compose/install/
-.. _Github: https://github.com/maykinmedia/open_zaaktypebeheer/
+.. _Github: https://github.com/maykinmedia/open-zaaktypebeheer/
 
 
 More Docker
@@ -273,58 +276,11 @@ Example usage:
     JOB_NAME=publish RELEASE_TAG=dev ./bin/release-docker-image.sh
 
 
-Staging and production
-======================
-
-Ansible is used to deploy test, staging and production servers. It is assumed
-the target machine has a clean `Debian`_ installation.
-
-#. Make sure you have `Ansible`_ installed (globally or in the virtual
-   environment):
-
-   .. code-block:: bash
-
-       $ pip install ansible
-
-#. Navigate to the project directory, and install the Maykin deployment
-   submodule if you haven't already:
-
-   .. code-block:: bash
-
-       $ git submodule update --init
-
-#. Run the Ansible playbook to provision a clean Debian machine:
-
-   .. code-block:: bash
-
-       $ cd deployment
-       $ ansible-playbook <test/staging/production>.yml
-
-For more information, see the ``README`` file in the deployment directory.
-
-.. _Debian: https://www.debian.org/
-.. _Ansible: https://pypi.org/project/ansible/
-
-
 Settings
 ========
 
 All settings for the project can be found in
 ``src/open_zaaktypebeheer/conf``.
+
 The file ``local.py`` overwrites settings from the base configuration.
 
-
-Commands
-========
-
-Commands can be executed using:
-
-.. code-block:: bash
-
-    $ python src/manage.py <command>
-
-There are no specific commands for the project. See
-`Django framework commands`_ for all default commands, or type
-``python src/manage.py --help``.
-
-.. _Django framework commands: https://docs.djangoproject.com/en/dev/ref/django-admin/#available-commands
