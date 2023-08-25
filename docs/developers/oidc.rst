@@ -8,42 +8,8 @@ To test logging in with OIDC, we can use Keycloak. Keycloak can be run locally w
 
 You can use the following ``docker-compose.yml`` file to run the Keycloak container (plus a postgres database).
 
-.. code-block::
-   :caption: docker-compose.yaml
-   # Adapted from https://gruchalski.com/posts/2020-09-03-keycloak-with-docker-compose/
-
-   version: '3.9'
-
-   services:
-     postgres:
-       image: postgres:14
-       restart: unless-stopped
-       environment:
-         POSTGRES_DB: keycloak
-         POSTGRES_USER: keycloak
-         POSTGRES_PASSWORD: keycloak
-       networks:
-         - local-keycloak
-
-     keycloak:
-       depends_on:
-         - postgres
-       container_name: local_keycloak
-       environment:
-         DB_VENDOR: postgres
-         DB_ADDR: postgres
-         DB_DATABASE: keycloak
-         DB_USER: keycloak
-         DB_PASSWORD: keycloak
-       image: jboss/keycloak:16.1.1
-       ports:
-         - "28080:8080"
-       restart: unless-stopped
-       networks:
-         - local-keycloak
-
-   networks:
-     local-keycloak:
+.. literalinclude:: assets/docker-compose-keycloak.yaml
+   :language: yaml
 
 Once the containers are up and running, execute the following command:
 
