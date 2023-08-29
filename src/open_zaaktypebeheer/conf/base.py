@@ -146,6 +146,7 @@ MIDDLEWARE = [
     "axes.middleware.AxesMiddleware",
     "hijack.middleware.HijackUserMiddleware",
     "django_otp.middleware.OTPMiddleware",
+    "djangorestframework_camel_case.middleware.CamelCaseMiddleWare",
 ]
 
 ROOT_URLCONF = "open_zaaktypebeheer.urls"
@@ -529,6 +530,15 @@ REST_FRAMEWORK = {
         "anon": throttle_rate_anon,
         "user": throttle_rate_user,
     },
+    "DEFAULT_RENDERER_CLASSES": [
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+    ],
+    "DEFAULT_PARSER_CLASSES": [
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+        "djangorestframework_camel_case.parser.CamelCaseFormParser",
+        "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
@@ -547,6 +557,9 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Open Zaaktypebeheer API",
     "DESCRIPTION": _DESCRIPTION,
     "VERSION": API_VERSION,
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
+    ],
 }
 
 #
