@@ -44,4 +44,7 @@ urlpatterns = [
         "v1/catalogi/",
         include("open_zaaktypebeheer.api.catalogi.urls", namespace="catalogi"),
     ),
+    path(
+        "v1/config/", include("open_zaaktypebeheer.api.config.urls", namespace="config")
+    ),
 ]
