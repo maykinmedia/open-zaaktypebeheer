@@ -20,6 +20,7 @@ mozilla-django-oidc-db
 # API libraries
 djangorestframework
 django-cors-headers
+djangorestframework-camel-case
 
 # API schema generation
 drf-spectacular
