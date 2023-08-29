@@ -17,4 +17,4 @@ class ConfigurationViewTests(APITestCase):
             response = self.client.get(config_url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(response.json()["oidc_enabled"])
+        self.assertFalse(response.json()["oidcEnabled"])

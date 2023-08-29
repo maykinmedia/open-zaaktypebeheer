@@ -32,7 +32,7 @@ class UserMeTest(APITestCase):
             {
                 "username": "test",
                 "email": "aaa@aaa.aaa",
-                "first_name": "Jon",
-                "last_name": "Doe",
+                "firstName": "Jon",
+                "lastName": "Doe",
             },
         )
