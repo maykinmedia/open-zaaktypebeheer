@@ -1,6 +1,12 @@
+from django.urls import path
+
 from rest_framework.routers import DefaultRouter
 
-from .views import InformatieobjecttypenViewSet, ZaaktypenViewSet
+from .views import (
+    InformatieobjecttypenViewSet,
+    ZaaktypenViewSet,
+    ZaakypeInformatieobjecttypeViewSet,
+)
 
 app_name = "catalogi"
 
@@ -11,5 +17,11 @@ router.register(
     InformatieobjecttypenViewSet,
     basename="informatieobjecttypen",
 )
-# router.register('zaaktype-informatieobjecttypen', ZaaktypenViewSet, basename='zaaktype-informatieobjecttypen')
-urlpatterns = router.urls
+
+urlpatterns = router.urls + [
+    path(
+        "zaaktype-informatieobjecttypen/",
+        ZaakypeInformatieobjecttypeViewSet.as_view(),
+        name="zaaktype-informatieobjecttypen",
+    ),
+]
