@@ -129,6 +129,7 @@ INSTALLED_APPS = [
     # Project applications.
     "open_zaaktypebeheer.accounts",
     "open_zaaktypebeheer.utils",
+    "open_zaaktypebeheer.api.config",
 ]
 
 MIDDLEWARE = [

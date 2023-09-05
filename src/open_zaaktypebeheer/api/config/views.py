@@ -1,11 +1,11 @@
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema
-from mozilla_django_oidc_db.models import OpenIDConnectConfig
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import GeneralConfiguration
 from .serializers import ConfigSerializer
 
 
@@ -20,9 +20,6 @@ class ConfigurationView(APIView):
         },
     )
     def get(self, request: Request, *args, **kwargs):
-        oidc_config = OpenIDConnectConfig.get_solo()
-
-        serializer = ConfigSerializer(data={"oidc_enabled": oidc_config.enabled})
-        serializer.is_valid(raise_exception=True)
-
+        config = GeneralConfiguration.get_solo()
+        serializer = ConfigSerializer(instance=config)
         return Response(serializer.data)
