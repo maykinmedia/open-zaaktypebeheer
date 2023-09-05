@@ -1,3 +1,5 @@
+from django.test import override_settings
+
 from requests_mock import Mocker
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -735,3 +737,63 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
                 "instance": "urn:uuid:abd3add1-beb8-4d1e-97fd-589b4d797956",
             },
         )
+
+    @override_settings(LANGUAGE_CODE="en")
+    def test_relation_to_delete_or_update_doesnt_have_url(self, m):
+        mock_service_oas_get(
+            m,
+            url="http://catalogi-api.nl/",
+            oas_url="http://catalogi-api.nl/api/schema/openapi.yaml",
+            service="catalogi",
+        )
+        relation_1 = generate_oas_component(
+            "catalogi",
+            "schemas/ZaakTypeInformatieObjectType",
+            url="http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
+            zaaktype="http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+            informatieobjecttype="http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
+            volgnummer=1,
+            richting="intern",
+        )
+        del relation_1["url"]  # Test missing URL
+        relation_2 = generate_oas_component(
+            "catalogi",
+            "schemas/ZaakTypeInformatieObjectType",
+            url="http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/222-222-222",
+            zaaktype="http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+            informatieobjecttype="http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/222-222-222",
+            volgnummer=2,
+            richting="uitgaand",
+        )
+        updated_relation_2 = {**relation_2, "volgnummer": 3}
+        del updated_relation_2["url"]  # Test missing URL
+
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen?zaaktype=http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111&status=concept",
+            json={"results": [relation_1, relation_2]},
+        )
+        m.delete(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
+            status_code=204,
+        )
+        m.patch(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/222-222-222",
+            json=updated_relation_2,
+        )
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            reverse("api:catalogi:zaaktype-informatieobjecttypen"),
+            {
+                "zaaktype_url": "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+                "relations": [updated_relation_2],
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        data = response.json()
+
+        self.assertEqual(data["toDelete"], [{"url": ["This field is required."]}])
+        self.assertEqual(data["toUpdate"], [{"url": ["This field is required."]}])
