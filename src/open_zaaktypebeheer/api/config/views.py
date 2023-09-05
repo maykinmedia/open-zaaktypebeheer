@@ -15,11 +15,15 @@ class ConfigurationView(APIView):
 
     @extend_schema(
         summary=_("Retrieve configuration"),
+        description=_(
+            "Returns configuration fields that are needed by the frontend. "
+            "Not all settings are returned if the user is not authenticated."
+        ),
         responses={
             200: ConfigSerializer,
         },
     )
     def get(self, request: Request, *args, **kwargs):
         config = GeneralConfiguration.get_solo()
-        serializer = ConfigSerializer(instance=config)
+        serializer = ConfigSerializer(instance=config, context={"request": request})
         return Response(serializer.data)
