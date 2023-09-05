@@ -12,7 +12,11 @@ from zgw_consumers.service import get_paginated_results
 
 from .client import get_client
 from .mixins import ProxyMixin
-from .serializers import BulkOperationResultSerializer, RelationsToProcessSerializer
+from .serializers import (
+    BulkOperationResultSerializer,
+    RelationsOperationsSerializer,
+    RelationsToProcessSerializer,
+)
 from .utils import (
     fetch_informatieobjecttypen,
     get_relations_to_process,
@@ -88,7 +92,10 @@ class ZaakypeInformatieobjecttypeViewSet(ProxyMixin, APIView):
         summary=_("Bulk update zaaktype-informatieobjecttypen"),
         description=_("Create/Update/Delete zaaktype-informatieobjecttype relations."),
         request=RelationsToProcessSerializer,
-        responses={200: BulkOperationResultSerializer},
+        responses={
+            200: BulkOperationResultSerializer,
+            400: RelationsOperationsSerializer,
+        },
     )
     def post(self, request: Request, *args, **kwargs) -> Response:
         serializer = RelationsToProcessSerializer(data=request.data)

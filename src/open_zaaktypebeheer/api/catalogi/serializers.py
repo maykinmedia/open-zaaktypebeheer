@@ -9,7 +9,7 @@ from open_zaaktypebeheer.api.catalogi.constants import OperationStatus, Operatio
 class RelationSerializer(serializers.Serializer):
     informatieobjecttype = serializers.URLField(
         label=_("informatieobjecttype URL"),
-        help_text=_("The URL of the informatieobjecttype to relate"),
+        help_text=_("The URL of the informatieobjecttype"),
     )
     volgnummer = serializers.IntegerField(min_value=1, label=_("order number"))
     richting = serializers.ChoiceField(
@@ -21,6 +21,18 @@ class RelationSerializer(serializers.Serializer):
     url = serializers.URLField(
         label=_("URL"), required=False, help_text=_("URL of the relation if it exists.")
     )
+
+
+class ExistingZaaktypeInformatieobjecttypeSerializer(RelationSerializer):
+    url = serializers.URLField(
+        label=_("URL"), required=True, help_text=_("URL of the relation if it exists.")
+    )
+
+
+class RelationsOperationsSerializer(serializers.Serializer):
+    to_delete = ExistingZaaktypeInformatieobjecttypeSerializer(many=True)
+    to_update = ExistingZaaktypeInformatieobjecttypeSerializer(many=True)
+    to_create = RelationSerializer(many=True)
 
 
 class RelationsToProcessSerializer(serializers.Serializer):
@@ -70,13 +82,14 @@ class BulkOperationResultSerializer(serializers.Serializer):
             "Failures encountered while performing the create/update/delete "
             "operations on the zaaktype-informatieobjecttype relation."
         ),
+        required=False,
     )
 
     class Meta:
         fields = ("failures", "status")
 
     @extend_schema_field(serializers.ChoiceField(choices=OperationStatus.choices))
-    def get_status(self, obj) -> str:
+    def get_status(self, obj: dict) -> str:
         if not len(obj["failures"]):
             return OperationStatus.succeeded
 
