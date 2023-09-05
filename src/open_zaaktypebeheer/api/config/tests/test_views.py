@@ -11,7 +11,7 @@ class ConfigurationViewTests(APITestCase):
         config_url = reverse("api:config:configuration")
 
         with patch(
-            "open_zaaktypebeheer.api.config.views.OpenIDConnectConfig.get_solo",
+            "open_zaaktypebeheer.api.config.serializers.OpenIDConnectConfig.get_solo",
             return_value=OpenIDConnectConfig(enabled=False),
         ):
             response = self.client.get(config_url)
