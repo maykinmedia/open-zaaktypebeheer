@@ -32,7 +32,7 @@ class RelationsOperations:
 
 
 class RelationErrorInfo(TypedDict):
-    extra: dict
+    extra_information: dict
     errors: list
     operation: str
 
@@ -79,7 +79,7 @@ def _delete(client: ZGWClient, relation: dict) -> RelationErrorInfo | None:
     except (ClientError, HTTPError) as exc:
         logger.exception("Failed to delete relation %s.", relation["url"], exc_info=exc)
         return RelationErrorInfo(
-            extra=relation, errors=exc.args, operation=OperationType.delete
+            extra_information=relation, errors=exc.args, operation=OperationType.delete
         )
 
 
@@ -93,7 +93,7 @@ def _update(client: ZGWClient, relation: dict) -> RelationErrorInfo | None:
     except (ClientError, HTTPError) as exc:
         logger.exception("Failed to update relation %s.", relation["url"], exc_info=exc)
         return RelationErrorInfo(
-            extra=relation, errors=exc.args, operation=OperationType.update
+            extra_information=relation, errors=exc.args, operation=OperationType.update
         )
 
 
@@ -111,7 +111,7 @@ def _create(client: ZGWClient, relation: dict) -> RelationErrorInfo | None:
             exc_info=exc,
         )
         return RelationErrorInfo(
-            extra=relation, errors=exc.args, operation=OperationType.create
+            extra_information=relation, errors=exc.args, operation=OperationType.create
         )
 
 

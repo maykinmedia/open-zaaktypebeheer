@@ -107,7 +107,8 @@ class ZaakypeInformatieobjecttypeViewSet(ProxyMixin, APIView):
 
         existing_relations = {item["informatieobjecttype"]: item for item in results}
         new_relations = {
-            item["informatieobjecttype"]: item for item in data["relations"]
+            item["informatieobjecttype"]: {**item, "zaaktype": data["zaaktype_url"]}
+            for item in data["relations"]
         }
 
         relations_to_proces = get_relations_to_process(
@@ -116,6 +117,5 @@ class ZaakypeInformatieobjecttypeViewSet(ProxyMixin, APIView):
 
         errors = process_relations(relations_to_proces, client)
 
-        serializer = BulkOperationResultSerializer(data={"failures": errors})
-        serializer.is_valid(raise_exception=True)
+        serializer = BulkOperationResultSerializer(instance={"failures": errors})
         return Response(serializer.data)

@@ -2,19 +2,14 @@ from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from open_zaaktypebeheer.api.catalogi.constants import OperationStatus, OperationType
 
 
-class ZaaktypeInformatieobjecttypeSerializer(serializers.Serializer):
+class RelationSerializer(serializers.Serializer):
     informatieobjecttype = serializers.URLField(
         label=_("informatieobjecttype URL"),
         help_text=_("The URL of the informatieobjecttype to relate"),
-    )
-    zaaktype = serializers.URLField(
-        label=_("zaaktype URL"),
-        help_text=_("The URL of the zaaktype to relate"),
     )
     volgnummer = serializers.IntegerField(min_value=1, label=_("order number"))
     richting = serializers.ChoiceField(
@@ -34,25 +29,14 @@ class RelationsToProcessSerializer(serializers.Serializer):
         help_text=_("The URL of the zaaktype to relate"),
     )
 
-    relations = ZaaktypeInformatieobjecttypeSerializer(many=True)
-
-    def validate(self, attrs):
-        for relation in attrs["relations"]:
-            if relation["zaaktype"] != attrs["zaaktype_url"]:
-                raise ValidationError(
-                    _(
-                        "The URL of the zaaktype inside each relation needs to match the URL in the zaaktype_url param"
-                    ),
-                )
-
-        return attrs
+    relations = RelationSerializer(many=True)
 
 
 class RelationError(serializers.Serializer):
-    extra = serializers.JSONField(
-        label=_("extra"),
+    extra_information = serializers.JSONField(
+        label=_("extra information"),
         help_text=_(
-            "Extra information the zaaktype-informatieobjecttype relation involved in the operation that caused an error."
+            "Extra information about the zaaktype-informatieobjecttype relation involved in the operation that caused an error."
         ),
     )
     errors = serializers.ListField(
