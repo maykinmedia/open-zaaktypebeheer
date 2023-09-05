@@ -12,7 +12,7 @@ class GeneralConfigurationAdmin(SingletonModelAdmin):
         (
             _("Styling"),
             {
-                "fields": ("logo", "favicon"),
+                "fields": ("logo", "favicon", "theme_class_name", "theme_stylesheet"),
             },
         ),
         (_("Open zaak"), {"fields": ("openzaak_admin_url",)}),
