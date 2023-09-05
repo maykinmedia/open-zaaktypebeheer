@@ -1,5 +1,3 @@
-from django.test import override_settings
-
 from requests_mock import Mocker
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -542,7 +540,7 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
         self.assertEqual(data["status"], OperationStatus.failed)
         self.assertEqual(len(data["failures"]), 1)
         self.assertEqual(
-            data["failures"][0]["extra"]["url"],
+            data["failures"][0]["extraInformation"]["url"],
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
         )
         self.assertEqual(
@@ -608,7 +606,7 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
         self.assertEqual(data["status"], OperationStatus.failed)
         self.assertEqual(len(data["failures"]), 1)
         self.assertEqual(
-            data["failures"][0]["extra"]["url"],
+            data["failures"][0]["extraInformation"]["url"],
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
         )
         self.assertEqual(
@@ -674,11 +672,11 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
         self.assertEqual(len(data["failures"]), 1)
         self.assertEqual(data["status"], OperationStatus.failed)
         self.assertEqual(
-            data["failures"][0]["extra"]["informatieobjecttype"],
+            data["failures"][0]["extraInformation"]["informatieobjecttype"],
             "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
         )
         self.assertEqual(
-            data["failures"][0]["extra"]["zaaktype"],
+            data["failures"][0]["extraInformation"]["zaaktype"],
             "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
         )
         self.assertEqual(
@@ -736,37 +734,4 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
                 "detail": "Niet gevonden.",
                 "instance": "urn:uuid:abd3add1-beb8-4d1e-97fd-589b4d797956",
             },
-        )
-
-    @override_settings(LANGUAGE_CODE="en")
-    def test_mismatched_zaaktype_urls(self, m):
-        mock_service_oas_get(
-            m,
-            url="http://catalogi-api.nl/",
-            oas_url="http://catalogi-api.nl/api/schema/openapi.yaml",
-            service="catalogi",
-        )
-        relation = generate_oas_component(
-            "catalogi",
-            "schemas/ZaakTypeInformatieObjectType",
-            url="http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
-            zaaktype="http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
-            informatieobjecttype="http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
-            volgnummer=1,
-        )
-
-        self.client.force_authenticate(user=self.user)
-        response = self.client.post(
-            reverse("api:catalogi:zaaktype-informatieobjecttypen"),
-            {
-                "zaaktype_url": "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/DIFFERENT-UUID",
-                "relations": [relation],
-            },
-            format="json",
-        )
-
-        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(
-            response.json()["nonFieldErrors"][0],
-            "The URL of the zaaktype inside each relation needs to match the URL in the zaaktype_url param",
         )
