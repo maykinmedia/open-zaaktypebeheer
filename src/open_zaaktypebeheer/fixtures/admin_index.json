@@ -35,6 +35,10 @@
             [
                 "zgw_consumers",
                 "service"
+            ],
+            [
+                "config",
+                "generalconfiguration"
             ]
         ]
     }

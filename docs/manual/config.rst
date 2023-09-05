@@ -53,3 +53,18 @@ configured.
    - **Secret**: The secret key configured in Open Zaak earlier (in the example above we used ``some-secret-value``).
 
 #. Click on **Save**.
+
+General configuration
+=====================
+
+Styling
+-------
+
+In the Open Zaaktypebeheer admin, it is possible to configure the logo and the favicon that should be used in the
+frontend. The settings can be found in **Configuration** > **General Configuration** under the header **Styling**.
+
+Open Zaak
+---------
+
+In the frontend, a link to the Open Zaak admin can be shown. This link can be configured in the admin.
+This setting can be found in **Configuration** > **General Configuration** under the header **Open Zaak**.
