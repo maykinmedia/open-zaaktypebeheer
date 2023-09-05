@@ -6,12 +6,22 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from zgw_consumers.constants import APITypes
 from zgw_consumers.service import get_paginated_results
 
 from .client import get_client
 from .mixins import ProxyMixin
-from .utils import fetch_informatieobjecttypen
+from .serializers import (
+    BulkOperationResultSerializer,
+    RelationsOperationsSerializer,
+    RelationsToProcessSerializer,
+)
+from .utils import (
+    fetch_informatieobjecttypen,
+    get_relations_to_process,
+    process_relations,
+)
 
 
 @extend_schema_view(
@@ -75,3 +85,44 @@ class InformatieobjecttypenViewSet(ProxyMixin, viewsets.ViewSet):
         )
 
         return Response(informatieobjecttypen)
+
+
+class ZaakypeInformatieobjecttypeViewSet(ProxyMixin, APIView):
+    @extend_schema(
+        summary=_("Bulk update zaaktype-informatieobjecttypen"),
+        description=_("Create/Update/Delete zaaktype-informatieobjecttype relations."),
+        request=RelationsToProcessSerializer,
+        responses={
+            200: BulkOperationResultSerializer,
+            400: RelationsOperationsSerializer,
+        },
+    )
+    def post(self, request: Request, *args, **kwargs) -> Response:
+        serializer = RelationsToProcessSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = serializer.validated_data
+        client = get_client(APITypes.ztc)
+
+        results = get_paginated_results(
+            client=client,
+            resource="zaakinformatieobjecttype",
+            request_kwargs={
+                "params": {"zaaktype": data["zaaktype_url"], "status": "concept"}
+            },
+        )
+
+        existing_relations = {item["informatieobjecttype"]: item for item in results}
+        new_relations = {
+            item["informatieobjecttype"]: {**item, "zaaktype": data["zaaktype_url"]}
+            for item in data["relations"]
+        }
+
+        relations_to_proces = get_relations_to_process(
+            existing_relations, new_relations
+        )
+
+        errors = process_relations(relations_to_proces, client)
+
+        serializer = BulkOperationResultSerializer(instance={"failures": errors})
+        return Response(serializer.data)
