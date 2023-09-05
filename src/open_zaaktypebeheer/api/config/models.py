@@ -1,3 +1,4 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -16,6 +17,18 @@ class GeneralConfiguration(SingletonModel):
         upload_to="logo/",
         blank=True,
         help_text=_("The favicon that will be displayed in the browser tabs."),
+    )
+    theme_class_name = models.SlugField(
+        verbose_name=_("theme class name"),
+        blank=True,
+        help_text=_("If provided, this class name will be set on the <html> element."),
+    )
+    theme_stylesheet = models.FileField(
+        _("theme stylesheet"),
+        blank=True,
+        upload_to="config/themes/",
+        validators=[FileExtensionValidator(allowed_extensions=("css",))],
+        help_text=_("A stylesheet with theme-specific css. "),
     )
     openzaak_admin_url = models.URLField(
         verbose_name=_("openzaak admin URL"),

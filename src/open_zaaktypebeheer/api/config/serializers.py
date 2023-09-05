@@ -18,6 +18,8 @@ class ConfigSerializer(serializers.ModelSerializer):
             "oidc_enabled",
             "logo",
             "favicon",
+            "theme_stylesheet",
+            "theme_class_name",
             "openzaak_admin_url",
         )
         # Allow list for non-authenticated users
@@ -25,6 +27,8 @@ class ConfigSerializer(serializers.ModelSerializer):
             "oidc_enabled",
             "logo",
             "favicon",
+            "theme_stylesheet",
+            "theme_class_name",
         )
 
     def get_fields(self):
