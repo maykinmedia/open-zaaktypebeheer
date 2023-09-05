@@ -16,11 +16,12 @@
     <body class="view__body">
         <main>
             {% block content %}
-                Override <code>{% verbatim %}{% block content %}{% endverbatim %}</code>
-                to get some actual content.
+                This is the Open Zaaktypebeheer backend.
+                See the <a href='/admin/'>admin</a>, the <a href='/api/docs/'>API docs</a> or make use of
+                the <a href='https://github.com/maykinmedia/open-zaaktypebeheer-ui/'>Open Zaaktypebeheer Frontend</a> (separately installed).
             {% endblock %}
         </main>
-        
+
         <script src="{% static 'bundles/open_zaaktypebeheer-js.js' %}"></script>
     </body>
 </html>

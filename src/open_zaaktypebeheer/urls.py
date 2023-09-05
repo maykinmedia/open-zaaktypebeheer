@@ -12,9 +12,9 @@ from mozilla_django_oidc_db.views import AdminLoginFailure
 from open_zaaktypebeheer.accounts.views.password_reset import PasswordResetView
 
 handler500 = "open_zaaktypebeheer.utils.views.server_error"
-admin.site.site_header = "open_zaaktypebeheer admin"
-admin.site.site_title = "open_zaaktypebeheer admin"
-admin.site.index_title = "Welcome to the open_zaaktypebeheer admin"
+admin.site.site_header = "Open Zaaktypebeheer admin"
+admin.site.site_title = "Open Zaaktypebeheer admin"
+admin.site.index_title = "Welcome to the Open Zaaktypebeheer admin"
 
 urlpatterns = [
     path(
