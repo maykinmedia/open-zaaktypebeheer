@@ -14,15 +14,15 @@ from ..constants import OperationStatus
 from .factories import ServiceFactory
 
 
+@Mocker()
 class ZaaktypeViewTests(APITestCase):
-    def test_not_authenticated(self):
+    def test_not_authenticated(self, m):
         zaaktypen_url = reverse("api:catalogi:zaaktypen-list")
 
         response = self.client.get(zaaktypen_url)
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    @Mocker()
     def test_retrieve_zaaktypen(self, m):
         user = UserFactory.create(username="test", password="password")
         mock_service_oas_get(
@@ -62,7 +62,6 @@ class ZaaktypeViewTests(APITestCase):
             "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
         )
 
-    @Mocker()
     def test_upstream_raises_error(self, m):
         user = UserFactory.create(username="test", password="password")
         mock_service_oas_get(
@@ -105,7 +104,6 @@ class ZaaktypeViewTests(APITestCase):
             },
         )
 
-    @Mocker()
     def test_retrieve_zaaktype(self, m):
         user = UserFactory.create(username="test", password="password")
         mock_service_oas_get(
@@ -123,7 +121,26 @@ class ZaaktypeViewTests(APITestCase):
                 informatieobjecttypen=[
                     "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111"
                 ],
+                statustypen=[
+                    "http://catalogi-api.nl/catalogi/api/v1/statustypen/111-111-111"
+                ],
             ),
+        )
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen?zaaktype=http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111&status=alles",
+            json={
+                "results": [
+                    generate_oas_component(
+                        "catalogi",
+                        "schemas/ZaakTypeInformatieObjectType",
+                        url="http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
+                        informatieobjecttype="http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
+                        zaaktype="http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+                        volgnummer=1,
+                        richting="intern",
+                    )
+                ]
+            },
         )
         m.get(
             "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
@@ -133,6 +150,19 @@ class ZaaktypeViewTests(APITestCase):
                 url="http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
                 omschrijving="Related IOT",
             ),
+        )
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/statustypen?zaaktype=http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111&status=alles",
+            json={
+                "results": [
+                    generate_oas_component(
+                        "catalogi",
+                        "schemas/StatusType",
+                        url="http://catalogi-api.nl/catalogi/api/v1/statustype/111-111-111",
+                        omschrijving="A beautiful status type",
+                    )
+                ]
+            },
         )
         ServiceFactory.create(
             api_type=APITypes.ztc,
@@ -155,11 +185,66 @@ class ZaaktypeViewTests(APITestCase):
         )
         self.assertEqual(
             data["informatieobjecttypen"][0]["url"],
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
+        )
+        self.assertEqual(
+            data["informatieobjecttypen"][0]["zaaktype"],
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+        )
+        self.assertEqual(
+            data["informatieobjecttypen"][0]["informatieobjecttype"]["url"],
             "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
         )
         self.assertEqual(
-            data["informatieobjecttypen"][0]["omschrijving"],
-            "Related IOT",
+            data["statustypen"][0]["url"],
+            "http://catalogi-api.nl/catalogi/api/v1/statustype/111-111-111",
+        )
+
+    def test_retrieve_zaaktype_with_no_relations_and_statustypen(self, m):
+        user = UserFactory.create(username="test", password="password")
+        mock_service_oas_get(
+            m,
+            url="http://catalogi-api.nl/",
+            oas_url="http://catalogi-api.nl/api/schema/openapi.yaml",
+            service="catalogi",
+        )
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+            json=generate_oas_component(
+                "catalogi",
+                "schemas/ZaakType",
+                url="http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+                informatieobjecttypen=[],
+                statustypen=[],
+            ),
+        )
+
+        ServiceFactory.create(
+            api_type=APITypes.ztc,
+            api_root="http://catalogi-api.nl/catalogi/api/v1",
+            oas="http://catalogi-api.nl/api/schema/openapi.yaml",
+        )
+
+        self.client.force_authenticate(user=user)
+        response = self.client.get(
+            reverse("api:catalogi:zaaktypen-detail", kwargs={"uuid": "111-111-111"})
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+
+        self.assertEqual(
+            data["url"],
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+        )
+        self.assertEqual(
+            data["informatieobjecttypen"],
+            [],
+        )
+        self.assertEqual(
+            data["statustypen"],
+            [],
         )
 
 

@@ -6,6 +6,7 @@ from zds_client import ClientError
 from zgw_consumers.api_models.types import JSONObject
 from zgw_consumers.client import ZGWClient
 from zgw_consumers.concurrent import parallel
+from zgw_consumers.service import get_paginated_results
 
 from .constants import OperationType
 from .serializers import RelationsOperationsSerializer
@@ -22,6 +23,50 @@ def fetch_informatieobjecttypen(urls: list[str], client: ZGWClient) -> list[JSON
         resp_data = executor.map(_fetch, urls)
 
     return list(resp_data)
+
+
+def add_relation_information(zaaktype: dict, client: ZGWClient) -> list:
+    if not zaaktype.get("informatieobjecttypen", []):
+        return []
+
+    # Resolve the zaaktype-informatieobjecttypen relations
+    relations = get_paginated_results(
+        client=client,
+        resource="zaakinformatieobjecttype",
+        request_kwargs={"params": {"zaaktype": zaaktype["url"], "status": "alles"}},
+    )
+
+    # Resolve the related informatieobjecttypen
+    iots_urls = [relation["informatieobjecttype"] for relation in relations]
+    related_iots = fetch_informatieobjecttypen(
+        urls=iots_urls,
+        client=client,
+    )
+    related_iots = {iot["url"]: iot for iot in related_iots}
+
+    # Add informatieobjecttype data to the relation
+    updated_relations = [
+        {
+            **relation,
+            "informatieobjecttype": related_iots[relation["informatieobjecttype"]],
+        }
+        for relation in relations
+    ]
+
+    return updated_relations
+
+
+def add_statustypen_information(zaaktype: dict, client: ZGWClient) -> list:
+    if not zaaktype.get("statustypen", []):
+        return []
+
+    statustypen = get_paginated_results(
+        client=client,
+        resource="statustype",
+        request_kwargs={"params": {"zaaktype": zaaktype["url"], "status": "alles"}},
+    )
+
+    return statustypen
 
 
 def relation_has_changed(new_relation: dict, old_relation: dict) -> bool:
