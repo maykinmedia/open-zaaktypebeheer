@@ -17,11 +17,7 @@ from .serializers import (
     RelationsOperationsSerializer,
     RelationsToProcessSerializer,
 )
-from .utils import (
-    fetch_informatieobjecttypen,
-    get_relations_to_process,
-    process_relations,
-)
+from .utils import add_relation_information, get_relations_to_process, process_relations
 
 
 @extend_schema_view(
@@ -32,7 +28,8 @@ from .utils import (
     retrieve=extend_schema(
         summary=_("Retrieve zaaktype"),
         description=_(
-            "Retrieve a zaaktype using the configured ZTC service. The related informatieobjecttypen are resolved."
+            "Retrieve a zaaktype using the configured ZTC service. "
+            "The related zaaktype-informatieobjecttypen and informatieobjecttypen are resolved."
         ),
     ),
 )
@@ -57,12 +54,7 @@ class ZaaktypenViewSet(ProxyMixin, viewsets.ViewSet):
             resource="zaaktype", url=f"/catalogi/api/v1/zaaktypen/{uuid}"
         )
 
-        # Resolve the related informatieobjecttypen
-        related_iots = fetch_informatieobjecttypen(
-            urls=zaaktype.get("informatieobjecttypen", []), client=client
-        )
-        zaaktype["informatieobjecttypen"] = related_iots
-
+        zaaktype["informatieobjecttypen"] = add_relation_information(zaaktype, client)
         return Response(zaaktype)
 
 
