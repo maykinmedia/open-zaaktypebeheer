@@ -153,6 +153,19 @@ class ZaaktypeViewTests(APITestCase):
                 omschrijving="Related IOT",
             ),
         )
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/statustypen?zaaktype=http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111&status=alles",
+            json={
+                "results": [
+                    generate_oas_component(
+                        "catalogi",
+                        "schemas/StatusType",
+                        url="http://catalogi-api.nl/catalogi/api/v1/statustype/111-111-111",
+                        omschrijving="A beautiful status type",
+                    )
+                ]
+            },
+        )
         ServiceFactory.create(
             api_type=APITypes.ztc,
             api_root="http://catalogi-api.nl/catalogi/api/v1",
@@ -183,6 +196,10 @@ class ZaaktypeViewTests(APITestCase):
         self.assertEqual(
             data["informatieobjecttypen"][0]["informatieobjecttype"]["url"],
             "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
+        )
+        self.assertEqual(
+            data["statustypen"][0]["url"],
+            "http://catalogi-api.nl/catalogi/api/v1/statustype/111-111-111",
         )
 
 
