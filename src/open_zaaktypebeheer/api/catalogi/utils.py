@@ -57,6 +57,9 @@ def add_relation_information(zaaktype: dict, client: ZGWClient) -> list:
 
 
 def add_statustypen_information(zaaktype: dict, client: ZGWClient) -> list:
+    if not zaaktype.get("statustypen", []):
+        return []
+
     statustypen = get_paginated_results(
         client=client,
         resource="statustype",
