@@ -34,7 +34,7 @@ from .utils import (
         summary=_("Retrieve zaaktype"),
         description=_(
             "Retrieve a zaaktype using the configured ZTC service. "
-            "The related zaaktype-informatieobjecttypen and informatieobjecttypen are resolved."
+            "The related zaaktype-informatieobjecttypen, informatieobjecttypen and statustypen are resolved."
         ),
     ),
 )
