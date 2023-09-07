@@ -123,7 +123,26 @@ class ZaaktypeViewTests(APITestCase):
                 informatieobjecttypen=[
                     "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111"
                 ],
+                statustypen=[
+                    "http://catalogi-api.nl/catalogi/api/v1/statustypen/111-111-111"
+                ],
             ),
+        )
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen?zaaktype=http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111&status=alles",
+            json={
+                "results": [
+                    generate_oas_component(
+                        "catalogi",
+                        "schemas/ZaakTypeInformatieObjectType",
+                        url="http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
+                        informatieobjecttype="http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
+                        zaaktype="http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+                        volgnummer=1,
+                        richting="intern",
+                    )
+                ]
+            },
         )
         m.get(
             "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
@@ -155,11 +174,15 @@ class ZaaktypeViewTests(APITestCase):
         )
         self.assertEqual(
             data["informatieobjecttypen"][0]["url"],
-            "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
         )
         self.assertEqual(
-            data["informatieobjecttypen"][0]["omschrijving"],
-            "Related IOT",
+            data["informatieobjecttypen"][0]["zaaktype"],
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+        )
+        self.assertEqual(
+            data["informatieobjecttypen"][0]["informatieobjecttype"]["url"],
+            "http://catalogi-api.nl/catalogi/api/v1/informatieobjecttypen/111-111-111",
         )
 
 
