@@ -56,6 +56,16 @@ def add_relation_information(zaaktype: dict, client: ZGWClient) -> list:
     return updated_relations
 
 
+def add_statustypen_information(zaaktype: dict, client: ZGWClient) -> list:
+    statustypen = get_paginated_results(
+        client=client,
+        resource="statustype",
+        request_kwargs={"params": {"zaaktype": zaaktype["url"], "status": "alles"}},
+    )
+
+    return statustypen
+
+
 def relation_has_changed(new_relation: dict, old_relation: dict) -> bool:
     new_status_type = new_relation.get("statustype") or ""
     old_status_type = old_relation.get("statustype") or ""

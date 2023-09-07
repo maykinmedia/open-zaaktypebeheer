@@ -17,7 +17,12 @@ from .serializers import (
     RelationsOperationsSerializer,
     RelationsToProcessSerializer,
 )
-from .utils import add_relation_information, get_relations_to_process, process_relations
+from .utils import (
+    add_relation_information,
+    add_statustypen_information,
+    get_relations_to_process,
+    process_relations,
+)
 
 
 @extend_schema_view(
@@ -55,6 +60,7 @@ class ZaaktypenViewSet(ProxyMixin, viewsets.ViewSet):
         )
 
         zaaktype["informatieobjecttypen"] = add_relation_information(zaaktype, client)
+        zaaktype["statustypen"] = add_statustypen_information(zaaktype, client)
         return Response(zaaktype)
 
 
