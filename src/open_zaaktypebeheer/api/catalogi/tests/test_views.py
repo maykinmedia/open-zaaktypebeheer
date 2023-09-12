@@ -882,3 +882,94 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
 
         self.assertEqual(data["toDelete"], [{"url": ["This field is required."]}])
         self.assertEqual(data["toUpdate"], [{"url": ["This field is required."]}])
+
+
+@Mocker()
+class CatalogusViewTests(APITestCase):
+    def test_not_authenticated(self, m):
+        catalogussen_url = reverse("api:catalogi:catalogussen-list")
+
+        response = self.client.get(catalogussen_url)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_retrieve_catalogussen(self, m):
+        user = UserFactory.create()
+        mock_service_oas_get(
+            m,
+            url="http://catalogi-api.nl/",
+            oas_url="http://catalogi-api.nl/api/schema/openapi.yaml",
+            service="catalogi",
+        )
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/catalogussen",
+            json={
+                "results": [
+                    generate_oas_component(
+                        "catalogi",
+                        "schemas/Catalogus",
+                        url="http://catalogi-api.nl/catalogi/api/v1/catalogussen/111-111-111",
+                    )
+                ]
+            },
+        )
+        ServiceFactory.create(
+            api_type=APITypes.ztc,
+            api_root="http://catalogi-api.nl/catalogi/api/v1",
+            oas="http://catalogi-api.nl/api/schema/openapi.yaml",
+        )
+
+        self.client.force_authenticate(user=user)
+        response = self.client.get(reverse("api:catalogi:catalogussen-list"))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+
+        self.assertTrue(isinstance(data, list))
+        self.assertEqual(
+            data[0]["url"],
+            "http://catalogi-api.nl/catalogi/api/v1/catalogussen/111-111-111",
+        )
+
+    def test_upstream_raises_error(self, m):
+        user = UserFactory.create(username="test", password="password")
+        mock_service_oas_get(
+            m,
+            url="http://catalogi-api.nl/",
+            oas_url="http://catalogi-api.nl/api/schema/openapi.yaml",
+            service="catalogi",
+        )
+        m.get(
+            "http://catalogi-api.nl/catalogi/api/v1/catalogussen",
+            status_code=404,
+            json={
+                "type": "http://catalogi-api.nl/ref/fouten/NotFound/",
+                "code": "not_found",
+                "title": "Niet gevonden.",
+                "status": 404,
+                "detail": "Niet gevonden.",
+                "instance": "urn:uuid:abd3add1-beb8-4d1e-97fd-589b4d797956",
+            },
+        )
+        ServiceFactory.create(
+            api_type=APITypes.ztc,
+            api_root="http://catalogi-api.nl/catalogi/api/v1",
+            oas="http://catalogi-api.nl/api/schema/openapi.yaml",
+        )
+
+        self.client.force_authenticate(user=user)
+        response = self.client.get(reverse("api:catalogi:catalogussen-list"))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(
+            response.json(),
+            {
+                "type": "http://catalogi-api.nl/ref/fouten/NotFound/",
+                "code": "not_found",
+                "title": "Niet gevonden.",
+                "status": 404,
+                "detail": "Niet gevonden.",
+                "instance": "urn:uuid:abd3add1-beb8-4d1e-97fd-589b4d797956",
+            },
+        )
