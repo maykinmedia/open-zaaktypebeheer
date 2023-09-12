@@ -22,29 +22,6 @@ class ConfigSerializer(serializers.ModelSerializer):
             "theme_class_name",
             "openzaak_admin_url",
         )
-        # Allow list for non-authenticated users
-        public_fields = (
-            "oidc_enabled",
-            "logo",
-            "favicon",
-            "theme_stylesheet",
-            "theme_class_name",
-        )
-
-    def get_fields(self):
-        fields = super().get_fields()
-
-        request = self.context.get("request")
-
-        # If the user is authenticated, return all the fields
-        if not request.user.is_anonymous:
-            return fields
-
-        return {
-            field_key: field_value
-            for field_key, field_value in fields.items()
-            if field_key in self.Meta.public_fields
-        }
 
     @extend_schema_field(serializers.BooleanField)
     def get_oidc_enabled(self, obj: GeneralConfiguration) -> bool:
