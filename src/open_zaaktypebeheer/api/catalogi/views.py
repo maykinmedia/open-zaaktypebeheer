@@ -27,6 +27,27 @@ from .utils import (
 
 @extend_schema_view(
     list=extend_schema(
+        summary=_("List catalogues"),
+        description=_("Retrieve catalogues using the configured ZTC service."),
+    ),
+)
+class CatalogussenViewSet(ProxyMixin, viewsets.ViewSet):
+    lookup_field = "uuid"
+
+    def list(self, request: Request) -> Response:
+        client = get_client(APITypes.ztc)
+
+        catalogi_list = get_paginated_results(
+            client=client,
+            resource="catalogus",
+            request_kwargs={"params": request.query_params},
+        )
+
+        return Response(catalogi_list)
+
+
+@extend_schema_view(
+    list=extend_schema(
         summary=_("List zaaktypen"),
         description=_("Retrieve zaaktypen using the configured ZTC service."),
     ),
