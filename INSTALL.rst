@@ -163,6 +163,15 @@ file or as part of the ``(post)activate`` of your virtualenv.
 * ``CORS_ALLOWED_ORIGINS``: the origin of the frontend. For example, ``http://localhost:5173``.
 * ``OIDC_REDIRECT_ALLOWED_HOSTS``: the hosts to which OIDC can redirect. For example, ``localhost:5173``.
 * ``CSRF_TRUSTED_ORIGINS``: A list of trusted origins for unsafe requests (e.g. POST). For example, ``http://localhost:5173``.
+* ``CSRF_COOKIE_SAMESITE``: The value of the SameSite flag on the CSRF cookie. Possibilities are ``None``, ``Lax`` or
+  ``Strict``. If ``None`` the CSRF cookie will be sent in cross-site requests. If ``Lax``, the CSRF cookie will only be
+  sent when navigating to the site with GET requests, but not Ajax cross-site requests or navigation with POST.
+  If ``Strict``, it will only be sent for same-site requests. It defaults to ``Lax``.
+* ``CSRF_COOKIE_SECURE``: Whether to use a secure cookie for the CSRF cookie. If this is set to ``True``, the cookie
+  will be marked as 'secure', which means browsers may ensure that the cookie is only sent with an HTTPS connection.
+  Defaults to the same value as ``IS_HTTPS``.
+* ``SESSION_COOKIE_SAMESITE``: Same as for the ``CSRF_COOKIE_SAMESITE``, but for the session cookie. Defaults to ``Lax``.
+* ``SESSION_COOKIE_SECURE``: Same as for the ``CSRF_COOKIE_SECURE``. Defaults to the same value as ``IS_HTTPS``.
 
 Docker
 ======
