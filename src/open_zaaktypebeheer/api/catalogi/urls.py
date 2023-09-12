@@ -3,6 +3,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
+    CatalogussenViewSet,
     InformatieobjecttypenViewSet,
     ZaaktypenViewSet,
     ZaakypeInformatieobjecttypeViewSet,
@@ -17,6 +18,7 @@ router.register(
     InformatieobjecttypenViewSet,
     basename="informatieobjecttypen",
 )
+router.register("catalogussen", CatalogussenViewSet, basename="catalogussen")
 
 urlpatterns = router.urls + [
     path(
