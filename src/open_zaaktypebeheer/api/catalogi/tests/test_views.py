@@ -457,9 +457,14 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen?zaaktype=http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111&status=concept",
             json={"results": [relation_1, relation_2]},
         )
-        m.patch(
+        m.delete(
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/222-222-222",
+            status_code=204,
+        )
+        m.post(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen",
             json=updated_relation_2,
+            status_code=201,
         )
 
         self.client.force_authenticate(user=self.user)
@@ -483,6 +488,10 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
         self.assertEqual(0, len(data["failures"]))
         self.assertEqual(
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/222-222-222",
+            m.request_history[-2].url,
+        )
+        self.assertEqual(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen",
             m.request_history[-1].url,
         )
 
@@ -530,17 +539,13 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
             status_code=204,
         )
+        m.delete(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/222-222-222",
+            status_code=204,
+        )
         m.post(
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen",
-            json={
-                **relation_3,
-                "url": "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/333-333-333",
-            },
             status_code=201,
-        )
-        m.patch(
-            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/222-222-222",
-            json=updated_relation_2,
         )
 
         self.client.force_authenticate(user=self.user)
@@ -562,17 +567,23 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
 
         history_urls = [item.url for item in m.request_history]
 
+        # First the deletions
         self.assertIn(
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
-            history_urls,
-        )
-        self.assertIn(
-            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen",
-            history_urls,
+            history_urls[-4:-2],
         )
         self.assertIn(
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/222-222-222",
-            history_urls,
+            history_urls[-4:-2],
+        )
+        # Then 2 creations
+        self.assertEqual(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen",
+            history_urls[-1],
+        )
+        self.assertEqual(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen",
+            history_urls[-2],
         )
 
     def test_deleting_relation_returns_error(self, m):
@@ -663,8 +674,12 @@ class ZaaktypeInformatieobjecttypeRelationTests(APITestCase):
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen?zaaktype=http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111&status=concept",
             json={"results": [relation]},
         )
-        m.patch(
+        m.delete(
             "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen/111-111-111",
+            status_code=204,
+        )
+        m.post(
+            "http://catalogi-api.nl/catalogi/api/v1/zaaktype-informatieobjecttypen",
             status_code=400,
             json={
                 "type": "Error",

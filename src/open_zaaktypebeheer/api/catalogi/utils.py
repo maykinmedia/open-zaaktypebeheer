@@ -118,20 +118,6 @@ def _delete(client: ZGWClient, relation: dict) -> RelationErrorInfo | None:
         )
 
 
-def _update(client: ZGWClient, relation: dict) -> RelationErrorInfo | None:
-    try:
-        client.partial_update(
-            resource="zaakinformatieobjecttype",
-            url=relation["url"],
-            data=relation,
-        )
-    except (ClientError, HTTPError) as exc:
-        logger.exception("Failed to update relation %s.", relation["url"], exc_info=exc)
-        return RelationErrorInfo(
-            extra_information=relation, errors=exc.args, operation=OperationType.update
-        )
-
-
 def _create(client: ZGWClient, relation: dict) -> RelationErrorInfo | None:
     try:
         client.create(
@@ -154,15 +140,20 @@ def process_relations(
     relations_to_process: RelationsOperationsDict, client: ZGWClient
 ) -> list[RelationErrorInfo]:
     with parallel() as executor:
-        results_delete = executor.map(
-            partial(_delete, client), relations_to_process["to_delete"]
+        _results_delete = executor.map(
+            partial(_delete, client),
+            relations_to_process["to_delete"] + relations_to_process["to_update"],
         )
-        results_create = executor.map(
-            partial(_create, client), relations_to_process["to_create"]
-        )
-        results_update = executor.map(
-            partial(_update, client), relations_to_process["to_update"]
+        # The deletions need to be finished before we can start creating. This is due to the relations to update (Issue #37)
+        # If we are changing 2 relations by swapping their volgnummer, they first have to be deleted, otherwise the
+        # unique-together constraint of zaaktype/volgnummer is violated when the first relation is updated
+        # (Open Zaak returns an error).
+        results_delete = list(_results_delete)
+
+        _results_create = executor.map(
+            partial(_create, client),
+            relations_to_process["to_create"] + relations_to_process["to_update"],
         )
 
-    results = list(results_delete) + list(results_update) + list(results_create)
+    results = results_delete + list(_results_create)
     return [info for info in results if info]
