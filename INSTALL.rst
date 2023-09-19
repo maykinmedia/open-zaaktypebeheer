@@ -167,11 +167,19 @@ file or as part of the ``(post)activate`` of your virtualenv.
   ``Strict``. If ``None`` the CSRF cookie will be sent in cross-site requests. If ``Lax``, the CSRF cookie will only be
   sent when navigating to the site with GET requests, but not Ajax cross-site requests or navigation with POST.
   If ``Strict``, it will only be sent for same-site requests. It defaults to ``Lax``.
+
+.. note::
+
+   A cookie with ``SameSite: 'None'`` requires the ``secure: true`` attribute. However, there is an exception for
+   ``localhost``: cookies can be sent over HTTP instead of HTTPS (see `here`_ for more details).
+
 * ``CSRF_COOKIE_SECURE``: Whether to use a secure cookie for the CSRF cookie. If this is set to ``True``, the cookie
   will be marked as 'secure', which means browsers may ensure that the cookie is only sent with an HTTPS connection.
   Defaults to the same value as ``IS_HTTPS``.
 * ``SESSION_COOKIE_SAMESITE``: Same as for the ``CSRF_COOKIE_SAMESITE``, but for the session cookie. Defaults to ``Lax``.
 * ``SESSION_COOKIE_SECURE``: Same as for the ``CSRF_COOKIE_SECURE``. Defaults to the same value as ``IS_HTTPS``.
+
+.. _here: https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies
 
 Docker
 ======
