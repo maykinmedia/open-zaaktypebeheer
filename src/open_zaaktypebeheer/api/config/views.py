@@ -22,5 +22,5 @@ class ConfigurationView(APIView):
     )
     def get(self, request: Request, *args, **kwargs):
         config = GeneralConfiguration.get_solo()
-        serializer = ConfigSerializer(instance=config)
+        serializer = ConfigSerializer(instance=config, context={"request": request})
         return Response(serializer.data)
