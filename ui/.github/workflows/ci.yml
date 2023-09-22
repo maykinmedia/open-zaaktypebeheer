@@ -1,0 +1,71 @@
+name: Run CI
+
+# Run this workflow every time a new commit pushed to your repository
+on:
+  push:
+    branches:
+      - main
+      - stable/*
+    tags:
+      - '*'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Create 'production' build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Build Javascript
+        run: |
+          yarn install
+          yarn build
+
+      - name: Store build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: open-zaaktypebeheer-ui-build
+          path: dist/
+          retention-days: 1
+
+  tests:
+    name: Run Javascript tests
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: open-zaaktypebeheer-ui-build
+          path: dist/
+
+  prettier:
+    name: Check frontend code formatting with prettier
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run prettier linter
+        run: yarn checkformat
