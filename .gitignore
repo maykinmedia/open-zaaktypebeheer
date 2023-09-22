@@ -12,10 +12,10 @@ __pycache__
 *.mo
 
 # Javascript libraries
-/node_modules/
+backend/node_modules/
 
 # Generated files
-/docs/_build
+backend/docs/_build
 
 # Coverage reports
 /reports/
@@ -26,15 +26,15 @@ __pycache__
 #/deployment/app.*.yml
 #/deployment/hosts.*
 local.py
-/env/
-/venv/
-/media/
-/static/
-/mail/
-/log/*.log*
-/log/nginx/*.log*
-/.env
+backend/env/
+backend/venv/
+backend/media/
+backend/static/
+backend/mail/
+backend/log/*.log*
+backend/log/nginx/*.log*
+.env
 
 # Static files
-src/open_zaaktypebeheer/static/bundles/
-src/open_zaaktypebeheer/fonts/
+backend/src/open_zaaktypebeheer/static/bundles/
+backend/src/open_zaaktypebeheer/fonts/
