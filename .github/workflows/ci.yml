@@ -66,6 +66,32 @@ jobs:
       - name: Publish coverage report
         uses: codecov/codecov-action@v3
 
+  frontend-build:
+    name: Create 'production' build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ui
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Build Javascript
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build
+
+      - name: Store build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: open-zaaktypebeheer-ui-build
+          path: dist/
+          retention-days: 1
+
   docs:
    name: Build and check documentation
    runs-on: ubuntu-latest
