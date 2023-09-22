@@ -25,6 +25,10 @@ jobs:
     name: Check import sorting
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up backend environment
@@ -42,6 +46,10 @@ jobs:
     name: Check code formatting with black
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up backend environment
@@ -55,6 +63,10 @@ jobs:
   flake8:
     name: Code style (flake8)
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - uses: actions/checkout@v3
@@ -86,6 +98,10 @@ jobs:
   migrations:
     name: Check for model changes not present in migrations
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
 
     services:
       postgres:
