@@ -13,6 +13,9 @@ const fetchDefaults = {
 
 function getUrl(endpoint: string) {
   let apiUrl: string = import.meta.env.VITE_BASE_API_URL;
+  if (!apiUrl) {
+    throw new Error('No Backend API configured.');
+  }
   if (!apiUrl.endsWith('/')) apiUrl = apiUrl + '/';
   if (endpoint.startsWith('/')) endpoint = endpoint.substring(1);
   return apiUrl + endpoint;
