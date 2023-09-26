@@ -1,0 +1,11 @@
+@import './fonts.css';
+@import './variables.css';
+@import './reset.css';
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  padding-right: 0 !important ;
+}

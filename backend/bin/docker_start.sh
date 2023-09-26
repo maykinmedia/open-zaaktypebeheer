@@ -26,6 +26,12 @@ done
 >&2 echo "Apply database migrations"
 python src/manage.py migrate
 
+# Replace VITE environment vars
+>&2 echo "Replace frontend env vars"
+cd /app/static/ui/
+./replace-envvars.sh
+cd -
+
 # Start server
 >&2 echo "Starting server"
 exec uwsgi \
@@ -35,6 +41,8 @@ exec uwsgi \
     --mount $mountpoint=open_zaaktypebeheer.wsgi:application \
     --static-map /static=/app/static \
     --static-map /media=/app/media  \
+    --static-map /frontend=/app/static/ui  \
+    --static-map /assets=/app/static/ui/assets  \
     --chdir src \
     --enable-threads \
     --processes $uwsgi_processes \

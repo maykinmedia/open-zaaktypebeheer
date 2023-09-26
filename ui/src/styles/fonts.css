@@ -1,0 +1,81 @@
+/* //~ TheMix C5 ~//
+//~ --------- ~// */
+
+/* Semi-Light */
+@font-face {
+  font-family: 'TheMixC5';
+  font-weight: 300;
+  src: local('TheMixC5'),
+    url('../assets/fonts/TheMixC5/TheMixC5-4_SemiLight.otf') format('opentype');
+}
+
+/* Regular / Plain */
+@font-face {
+  font-family: 'TheMixC5';
+  font-weight: normal;
+  src: url('../assets/fonts/TheMixC5/TheMixC5-5_Plain.otf') format('opentype');
+}
+
+/* Semi-Bold */
+@font-face {
+  font-family: 'TheMixC5';
+  font-weight: 500;
+  src: local('TheMixC5'), url('../assets/fonts/TheMixC5/TheMixC5-6_SemiBold.otf') format('opentype');
+}
+
+/* Bold */
+@font-face {
+  font-family: 'TheMixC5';
+  font-weight: bold;
+  src: local('TheMixC5'), url('../assets/fonts/TheMixC5/TheMixC5-7_Bold.otf') format('opentype');
+}
+
+/* //~ TheSans C5 ~//
+//~ ---------- ~// */
+
+/* Semi-Light */
+@font-face {
+  font-family: 'TheSansC5';
+  font-weight: 300;
+  src: local('TheSansC5'),
+    url('../assets/fonts/TheSansC5/TheSansC5-4_SemiLight.otf') format('opentype');
+}
+
+/* Plain / Regular */
+@font-face {
+  font-family: 'TheSansC5';
+  font-weight: normal;
+  src: local('TheSansC5'), url('../assets/fonts/TheSansC5/TheSansC5-5_Plain.otf') format('opentype');
+}
+
+/* Italic */
+@font-face {
+  font-family: 'TheSansC5';
+  font-weight: normal;
+  font-style: italic;
+  src: local('TheSansC5'),
+    url('../assets/fonts/TheSansC5/TheSansC5-5iPlainItalic.otf') format('opentype');
+}
+
+/* Semi-Bold */
+@font-face {
+  font-family: 'TheSansC5';
+  font-weight: 500;
+  src: local('TheSansC5'),
+    url('../assets/fonts/TheSansC5/TheSansC5-6_SemiBold.otf') format('opentype');
+}
+
+/* Bold */
+@font-face {
+  font-family: 'TheSansC5';
+  font-weight: bold;
+  src: local('TheSansC5'), url('../assets/fonts/TheSansC5/TheSansC5-7_Bold.otf') format('opentype');
+}
+
+/* Extra-Bold */
+@font-face {
+  font-family: 'TheSansC5';
+  font-weight: 800;
+  src: local('TheSansC5'),
+    url('../assets/fonts/TheSansC5/TheSansC5-8_ExtraBold.otf') format('opentype');
+}

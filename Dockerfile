@@ -1,8 +1,3 @@
-# This is a multi-stage build file, which means a stage is used to build
-# the backend (dependencies), the frontend stack and a final production
-# stage re-using assets from the build stages. This keeps the final production
-# image minimal in size.
-
 # Stage 1 - Backend build environment
 # includes compilers and build tooling to create the environment
 FROM python:3.10.9-slim-bullseye AS backend-build
@@ -19,32 +14,31 @@ RUN mkdir /app/src
 
 # Ensure we use the latest version of pip
 RUN pip install pip setuptools -U
-COPY ./requirements /app/requirements
+COPY ./backend/requirements /app/requirements
 RUN pip install -r requirements/production.txt
 
 
-# Stage 2 - Install frontend deps and build assets
-FROM node:18-bookworm-slim AS frontend-build
+# Stage 2 - Build the Front end
+FROM node:18-bullseye-slim AS frontend-build
+
+RUN mkdir /ui
+WORKDIR /ui
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        git \
-    && rm -rf /var/lib/apt/lists/*
+  git \
+  ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+COPY ./ui/.env.production.template ./.env.production
+COPY ./ui/package-lock.json ./ui/package.json ./
 
-# copy configuration/build files
-COPY ./build /app/build/
-COPY ./*.json ./*.js ./.babelrc /app/
+# TODO: Remove legacy options once install is fixed
+RUN npm ci --legacy-peer-deps
 
-# install WITH dev tooling
-RUN npm ci
+COPY ./ui .
+COPY ./ui/.env.production.template ./.env.production
 
-# copy source code
-COPY ./src /app/src
-
-# build frontend
 RUN npm run build
-
 
 # Stage 3 - Build docker image suitable for production
 FROM python:3.10.9-slim-bullseye
@@ -57,38 +51,26 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         mime-support \
         postgresql-client \
         gettext \
-        # lxml deps
-        # libxslt \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY ./bin/docker_start.sh /start.sh
-# Uncomment if you use celery
-# COPY ./bin/celery_worker.sh /celery_worker.sh
-# COPY ./bin/celery_beat.sh /celery_beat.sh
-# COPY ./bin/celery_flower.sh /celery_flower.sh
-RUN mkdir /app/log
-RUN mkdir /app/media
+COPY ./backend/bin/docker_start.sh /start.sh
 
-RUN useradd -M -u 1000 maykin
-RUN chown -R maykin:maykin /app
+RUN mkdir -p /app/log /app/media /app/src/open_zaaktypebeheer/static/ui/
 
-VOLUME ["/app/log", "/app/media"]
+COPY ./ui/scripts/replace-envvars.sh /app/src/open_zaaktypebeheer/static/ui/replace-envvars.sh
 
 # copy backend build deps
 COPY --from=backend-build /usr/local/lib/python3.10 /usr/local/lib/python3.10
 COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
-# Uncomment if you use celery
-# COPY --from=backend-build /usr/local/bin/celery /usr/local/bin/celery
-COPY --from=backend-build /app/src/ /app/src/
 
-# copy frontend build statics
-COPY --from=frontend-build /app/src/open_zaaktypebeheer/static /app/src/open_zaaktypebeheer/static
+COPY ./backend/src /app/src
 
-# copy source code
-COPY ./src /app/src
+COPY --from=frontend-build /ui/dist /app/src/open_zaaktypebeheer/static/ui
 
-RUN chown -R maykin:maykin /app
+RUN useradd -M -u 1000 maykin && chown -R maykin:maykin /app
+
+VOLUME ["/app/log", "/app/media"]
 
 # drop privileges
 USER maykin
@@ -108,8 +90,6 @@ LABEL org.label-schema.vcs-ref=$COMMIT_HASH \
       org.label-schema.version=$RELEASE \
       org.label-schema.name="open_zaaktypebeheer"
 
-# Run collectstatic and compilemessages, so the result is already included in
-# the image
 RUN python src/manage.py collectstatic --noinput \
     && python src/manage.py compilemessages
 

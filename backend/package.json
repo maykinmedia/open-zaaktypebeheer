@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/maykinmedia/open_zaaktypebeheer.git"
+    "url": "git+ssh://git@github.com:maykinmedia/open-zaaktypebeheer.git"
   },
   "author": "Maykin Media",
   "license": "UNLICENSED",

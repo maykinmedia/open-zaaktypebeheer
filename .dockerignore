@@ -1,16 +1,27 @@
-node_modules
+.dockerignore
 Dockerfile*
 docker-compose*
-.dockerignore
+/.github/
+.env
+.env.*
 .git
 .vscode
 env/
 local.py
-/doc/_build/
 
-/htmlcov
-.coverage
+/backend/doc/_build/
+backend/htmlcov
+backend/.coverage
+backend/static/
+backend/media/
+/backend/node_modules/
+/ui/node_modules/
 
-/static/
-/media/
-/private_media/
+/ui/build/
+/ui/dist/
+
+
+
+
+
+
