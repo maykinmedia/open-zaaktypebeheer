@@ -93,5 +93,7 @@ LABEL org.label-schema.vcs-ref=$COMMIT_HASH \
 RUN python src/manage.py collectstatic --noinput \
     && python src/manage.py compilemessages
 
+RUN chmod +x /app/static/ui/replace-envvars.sh
+
 EXPOSE 8000
 CMD ["/start.sh"]
