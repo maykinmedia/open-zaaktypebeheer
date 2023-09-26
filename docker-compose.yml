@@ -27,7 +27,7 @@ services:
       - open-zaaktypebeheer-dev
 
   web:
-    image: openzaaktypebeheer-full:latest
+    image: maykinmedia/open-zaaktypebeheer:latest
     environment:
       - DJANGO_SETTINGS_MODULE=open_zaaktypebeheer.conf.docker
       - SECRET_KEY=${SECRET_KEY:-django-insecure-!bkx+tx18&lvp(@_9)9ut(y(keqho*zhz1&^sqqgq9*i=__w(}
