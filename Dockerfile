@@ -17,8 +17,21 @@ RUN pip install pip setuptools -U
 COPY ./backend/requirements /app/requirements
 RUN pip install -r requirements/production.txt
 
+# Stage 2 - Build JS of the backend (needed for admin styles)
+FROM node:18-bullseye-slim AS backend-js-build
 
-# Stage 2 - Build the Front end
+WORKDIR /app
+
+COPY ./backend/build /app/build/
+COPY ./backend/*.json ./backend/*.js ./backend/.babelrc /app/
+
+RUN npm ci
+
+COPY ./backend/src /app/src
+
+RUN npm run build
+
+# Stage 3 - Build the Front end
 FROM node:18-bullseye-slim AS frontend-build
 
 RUN mkdir /ui
@@ -40,10 +53,10 @@ COPY ./ui/.env.production.template ./.env.production
 
 RUN npm run build
 
-# Stage 3 - Build docker image suitable for production
+# Stage 4 - Build docker image suitable for production
 FROM python:3.10.9-slim-bullseye
 
-# Stage 3.1 - Set up the needed production dependencies
+# Stage 4.1 - Set up the needed production dependencies
 # install all the dependencies for GeoDjango
 RUN apt-get update && apt-get install -y --no-install-recommends \
         procps \
@@ -56,7 +69,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 COPY ./backend/bin/docker_start.sh /start.sh
 
-RUN mkdir -p /app/log /app/media /app/src/open_zaaktypebeheer/static/ui/
+RUN mkdir -p /app/log /app/media /app/src/open_zaaktypebeheer/static/
 
 COPY ./ui/scripts/replace-envvars.sh /app/src/open_zaaktypebeheer/static/ui/replace-envvars.sh
 
@@ -66,6 +79,7 @@ COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
 
 COPY ./backend/src /app/src
 
+COPY --from=backend-js-build /app/src/open_zaaktypebeheer/static/bundles /app/src/open_zaaktypebeheer/static/bundles
 COPY --from=frontend-build /ui/dist /app/src/open_zaaktypebeheer/static/ui
 
 RUN useradd -M -u 1000 maykin && chown -R maykin:maykin /app
