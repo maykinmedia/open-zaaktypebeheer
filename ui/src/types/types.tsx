@@ -80,7 +80,7 @@ export type ZaaktypeT = {
     toelichting?: string;
   }[];
   beginGeldigheid: string;
-  eindeGeldigheid?: string;
+  eindeGeldigheid?: string | null;
   versiedatum: string;
   concept?: boolean;
 };

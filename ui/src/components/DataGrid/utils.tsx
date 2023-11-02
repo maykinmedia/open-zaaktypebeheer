@@ -31,6 +31,8 @@ export const defaultColumns = [
   'volgnummer',
   'richting',
   'statustype',
+  'beginGeldigheid',
+  'eindeGeldigheid',
 ];
 
 /**
@@ -89,7 +91,12 @@ export const createResultWithTypes = (data: ZaaktypeT[] | InformatieObjectT[]) =
     for (const obj of data) {
       const value = obj[attribute as keyof typeof obj];
       if (typeof value === 'undefined') break;
-      resultWithTypes[attribute] = typeof value;
+
+      if (value === null) {
+        resultWithTypes[attribute] = null;
+      } else {
+        resultWithTypes[attribute] = typeof value;
+      }
     }
   }
   return resultWithTypes;
