@@ -44,9 +44,7 @@ const GridAndStack = ({ loading, layout, data }: GridAndStackProps) => {
   return (
     <Stack direction={'row'} flexWrap={'wrap'} width={'100%'} spacing={spacings.medium} useFlexGap>
       {data.map((zaaktype: any) => {
-        const count = zaaktype?.informatieobjecttypen?.length ?? 0;
-        const description =
-          count === 1 ? `${count} informatieobjecttype` : `${count} informatieobjecttypen`;
+        const description = `Begin geldigheid: ${zaaktype.beginGeldigheid}`;
         const detailUrl = zaaktype?.url ? '/zaaktypen/' + uuidExtract(zaaktype.url) : '';
 
         return (
