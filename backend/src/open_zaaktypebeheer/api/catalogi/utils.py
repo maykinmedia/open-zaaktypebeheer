@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 from functools import partial
 
 from requests import HTTPError
@@ -157,3 +158,27 @@ def process_relations(
 
     results = results_delete + list(_results_create)
     return [info for info in results if info]
+
+
+def add_active_information(zaaktypen: list[dict]) -> list[dict]:
+    today = date.today()
+
+    def calculate_is_active(zaaktype: dict) -> dict:
+        start_validity = date.fromisoformat(zaaktype["beginGeldigheid"])
+        end_validity = (
+            date.fromisoformat(zaaktype["eindeGeldigheid"])
+            if zaaktype.get("eindeGeldigheid")
+            else None
+        )
+
+        is_active = today >= start_validity and (
+            end_validity is None or today < end_validity
+        )
+
+        zaaktype["actief"] = is_active
+        return zaaktype
+
+    with parallel() as executor:
+        processed_zaaktypen = executor.map(calculate_is_active, zaaktypen)
+
+    return list(processed_zaaktypen)

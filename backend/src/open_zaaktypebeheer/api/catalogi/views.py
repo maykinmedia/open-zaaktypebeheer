@@ -18,6 +18,7 @@ from .serializers import (
     RelationsToProcessSerializer,
 )
 from .utils import (
+    add_active_information,
     add_relation_information,
     add_statustypen_information,
     get_relations_to_process,
@@ -70,6 +71,9 @@ class ZaaktypenViewSet(ProxyMixin, viewsets.ViewSet):
             resource="zaaktype",
             request_kwargs={"params": request.query_params},
         )
+
+        # Which zaaktypen are active based on their beginGeldigheid and eindeGeldigheid
+        zaaktypen_list = add_active_information(zaaktypen_list)
 
         return Response(zaaktypen_list)
 
