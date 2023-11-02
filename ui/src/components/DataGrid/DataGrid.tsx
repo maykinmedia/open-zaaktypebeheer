@@ -9,6 +9,7 @@ function DataGrid({
   loading,
   height,
   showQuickFilter,
+  defaultFilters = [],
   columnVisibilityModel,
   ...rest
 }: DataGridProps) {
@@ -31,6 +32,13 @@ function DataGrid({
         slotProps={{
           toolbar: {
             showQuickFilter: showQuickFilter,
+          },
+        }}
+        initialState={{
+          filter: {
+            filterModel: {
+              items: defaultFilters,
+            },
           },
         }}
         columnBuffer={2}

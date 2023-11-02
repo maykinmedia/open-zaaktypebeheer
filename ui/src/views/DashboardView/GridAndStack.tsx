@@ -16,7 +16,15 @@ const GridAndStack = ({ loading, layout, data }: GridAndStackProps) => {
   );
 
   if (layout === 'datagrid')
-    return <DataGrid height={610} {...gridHandlers} {...gridData} loading={loading} />;
+    return (
+      <DataGrid
+        height={610}
+        {...gridHandlers}
+        {...gridData}
+        loading={loading}
+        defaultFilters={[{ field: 'actief', operator: 'is', value: 'true' }]}
+      />
+    );
 
   if (loading)
     return (
