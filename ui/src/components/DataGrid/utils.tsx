@@ -185,7 +185,9 @@ export function createRow(row: any) {
     volgnummer: '',
     richting: '',
     statustype: '',
-    id: `${uuidExtract(flattedRow.informatieobjecttype_url || flattedRow.url)}-${flattedRow.volgnummer}`,
+    id: `${uuidExtract(flattedRow.informatieobjecttype_url || flattedRow.url)}-${
+      flattedRow.volgnummer
+    }`,
     ...flattedRow,
   };
 }
