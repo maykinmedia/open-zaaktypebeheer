@@ -12,6 +12,7 @@ import {
   GridRowModel,
   GridRowSelectionModel,
   GridCallbackDetails,
+  GridFilterItem,
 } from '@mui/x-data-grid';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
@@ -80,9 +81,10 @@ export type ZaaktypeT = {
     toelichting?: string;
   }[];
   beginGeldigheid: string;
-  eindeGeldigheid?: string;
+  eindeGeldigheid?: string | null;
   versiedatum: string;
   concept?: boolean;
+  actief?: boolean;
 };
 
 export type InformatieObjectT = {
@@ -210,6 +212,7 @@ export type DataGridProps = MuiDataGridProps & {
   height?: number;
   loading?: boolean;
   showQuickFilter?: boolean;
+  defaultFilters?: GridFilterItem[];
 };
 
 export interface GridActionHandlers {

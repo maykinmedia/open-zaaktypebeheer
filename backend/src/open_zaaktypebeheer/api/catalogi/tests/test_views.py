@@ -1,5 +1,6 @@
 from django.test import override_settings
 
+import freezegun
 from requests_mock import Mocker
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -39,6 +40,8 @@ class ZaaktypeViewTests(APITestCase):
                         "catalogi",
                         "schemas/ZaakType",
                         url="http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
+                        beginGeldigheid="2022-01-01",
+                        eindeGeldigheid=None,
                     )
                 ]
             },
@@ -50,7 +53,9 @@ class ZaaktypeViewTests(APITestCase):
         )
 
         self.client.force_authenticate(user=user)
-        response = self.client.get(reverse("api:catalogi:zaaktypen-list"))
+
+        with freezegun.freeze_time("2023-01-01"):
+            response = self.client.get(reverse("api:catalogi:zaaktypen-list"))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -61,6 +66,7 @@ class ZaaktypeViewTests(APITestCase):
             data[0]["url"],
             "http://catalogi-api.nl/catalogi/api/v1/zaaktypen/111-111-111",
         )
+        self.assertTrue(data[0]["actief"])
 
     def test_upstream_raises_error(self, m):
         user = UserFactory.create(username="test", password="password")
