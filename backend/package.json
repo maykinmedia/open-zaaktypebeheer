@@ -1,6 +1,6 @@
 {
   "name": "open_zaaktypebeheer",
-  "version": "1.0.0-alpha.0",
+  "version": "0.1.1",
   "description": "open_zaaktypebeheer project",
   "main": "src/static/open_zaaktypebeheer/js/open_zaaktypebeheer.js",
   "directories": {
