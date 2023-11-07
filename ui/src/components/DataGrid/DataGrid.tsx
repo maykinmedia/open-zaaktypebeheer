@@ -1,9 +1,9 @@
-import { DataGrid as MuiDataGrid, nlNL } from '@mui/x-data-grid';
+import { DataGrid as MuiDataGrid, nlNL, GridFilterModel } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import { DataGridProps } from '../../types/types';
 import DataGridToolbar from './Toolbar';
 import DataGridLoadingOverlay from './LoadingOverlay';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function DataGrid({
   loading,
@@ -16,6 +16,18 @@ function DataGrid({
   ...rest
 }: DataGridProps) {
   const [visibilityModel, setVisibilityModel] = useState(columnVisibilityModel);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({
+    items: defaultFilters,
+  });
+
+  // For some reason, after data is reloaded, the filters are cleared.
+  // So this is programmatically resetting them.
+  useEffect(() => {
+    if (!loading) {
+      setFilterModel({ items: defaultFilters });
+    }
+  }, [loading]);
+
   return (
     <Box
       component={'section'}
@@ -37,13 +49,8 @@ function DataGrid({
             showQuickFilter: showQuickFilter,
           },
         }}
-        initialState={{
-          filter: {
-            filterModel: {
-              items: defaultFilters,
-            },
-          },
-        }}
+        filterModel={filterModel}
+        onFilterModelChange={(newFilterModel) => setFilterModel(newFilterModel)}
         columnBuffer={2}
         columnThreshold={2}
         loading={loading}
