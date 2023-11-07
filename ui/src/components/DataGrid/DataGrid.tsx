@@ -8,6 +8,8 @@ import { useState } from 'react';
 function DataGrid({
   loading,
   height,
+  rows,
+  columns,
   showQuickFilter,
   defaultFilters = [],
   columnVisibilityModel,
@@ -23,7 +25,8 @@ function DataGrid({
       }}
     >
       <MuiDataGrid
-        {...rest}
+        rows={rows}
+        columns={columns}
         rowModesModel={rest.rowModesModel}
         slots={{
           loadingOverlay: DataGridLoadingOverlay,
@@ -52,6 +55,7 @@ function DataGrid({
           setVisibilityModel(model);
         }}
         columnVisibilityModel={visibilityModel}
+        {...rest}
       />
     </Box>
   );

@@ -32,7 +32,11 @@ const ZaaktypeView = () => {
   }, []);
 
   const initialData = getInitialData(value?.zaaktype);
-  const { gridHandlers, ...gridData } = useDataGrid(initialData, loading, columnNames);
+  const { gridHandlers, rows, columns, columnVisibilityModel } = useDataGrid(
+    initialData,
+    loading,
+    columnNames
+  );
   const algemeenStructure = dataAlgemeenStructure(value?.zaaktype);
 
   const menuItems: MenuItems[] = [
@@ -98,7 +102,9 @@ const ZaaktypeView = () => {
               // state
               loading={loading}
               // data
-              {...gridData}
+              rows={rows}
+              columns={columns}
+              columnVisibilityModel={columnVisibilityModel}
               // interactive settings
               isCellEditable={() => false}
               disableRowSelectionOnClick
