@@ -11,7 +11,11 @@ export default function BulkEditor({
 }: BulkEditorProps) {
   const columnNames: ColumnTypes[] = ['checkbox', 'edit', 'title', 'bulkEditor', 'default'];
   const initialData = getInitialData(zaaktype, informatieobjecttypen);
-  const { gridHandlers, ...gridData } = useDataGrid(initialData, loading, columnNames);
+  const { gridHandlers, rows, columns, columnVisibilityModel } = useDataGrid(
+    initialData,
+    loading,
+    columnNames
+  );
 
   return (
     <DataGrid
@@ -22,7 +26,9 @@ export default function BulkEditor({
       // state
       loading={loading}
       // data
-      {...gridData}
+      rows={rows}
+      columns={columns}
+      columnVisibilityModel={columnVisibilityModel}
       // interactive settings
       isCellEditable={(params) => !!params.row.volgnummer}
       disableRowSelectionOnClick

@@ -9,7 +9,7 @@ import { uuidExtract } from '../../utils/extract.tsx';
 const columnNames: ColumnTypes[] = ['link', 'title', 'default'];
 
 const GridAndStack = ({ loading, layout, data }: GridAndStackProps) => {
-  const { gridHandlers, gridActionHandlers, ...gridData } = useDataGrid(
+  const { gridHandlers, rows, columns, columnVisibilityModel } = useDataGrid(
     { rows: data, selection: [] },
     loading,
     columnNames
@@ -19,10 +19,12 @@ const GridAndStack = ({ loading, layout, data }: GridAndStackProps) => {
     return (
       <DataGrid
         height={610}
-        {...gridHandlers}
-        {...gridData}
+        rows={rows}
+        columns={columns}
+        columnVisibilityModel={columnVisibilityModel}
         loading={loading}
         defaultFilters={[{ field: 'actief', operator: 'is', value: 'true' }]}
+        {...gridHandlers}
       />
     );
 

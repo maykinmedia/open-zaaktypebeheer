@@ -213,6 +213,8 @@ export type DataGridProps = MuiDataGridProps & {
   loading?: boolean;
   showQuickFilter?: boolean;
   defaultFilters?: GridFilterItem[];
+  rows: ZaaktypeT[];
+  columns: GridColDef[];
 };
 
 export interface GridActionHandlers {
