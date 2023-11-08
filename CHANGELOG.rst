@@ -2,6 +2,11 @@
 Change history
 ==============
 
+0.1.2 (2023-11-08)
+==================
+
+* Fixed the default filters for zaaktypen being reset when the catalogue was changed.
+
 
 0.1.1 (2023-11-03)
 ==================

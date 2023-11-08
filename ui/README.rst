@@ -2,7 +2,7 @@
 Open ZaakType Beheer UI
 =======================
 
-:Version: 0.1.1
+:Version: 0.1.2
 :Source: https://github.com/maykinmedia/open-zaaktypebeheer-ui
 :Keywords: API, Objects API, Objectstypes API, React
 
