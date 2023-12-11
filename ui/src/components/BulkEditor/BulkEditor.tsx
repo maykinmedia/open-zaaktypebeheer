@@ -11,7 +11,7 @@ export default function BulkEditor({
 }: BulkEditorProps) {
   const columnNames: ColumnTypes[] = ['checkbox', 'edit', 'title', 'bulkEditor', 'default'];
   const initialData = getInitialData(zaaktype, informatieobjecttypen);
-  const { gridHandlers, rows, columns, columnVisibilityModel } = useDataGrid(
+  const { gridHandlers, rows, columns, columnVisibilityModel, ...rest } = useDataGrid(
     initialData,
     loading,
     columnNames
@@ -37,6 +37,7 @@ export default function BulkEditor({
       showQuickFilter
       // interactive handlers
       {...gridHandlers}
+      {...rest}
     />
   );
 }
