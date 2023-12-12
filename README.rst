@@ -2,7 +2,7 @@
 Open-Zaaktypebeheer
 ===================
 
-:Version: 0.1.2
+:Version: 0.1.3
 :Source: https://github.com/maykinmedia/open-zaaktypebeheer
 :Keywords: ``open-zaaktypebeheer zaaktypen informatieobjecttypen catalogi``
 :PythonVersion: 3.10
