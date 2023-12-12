@@ -2,6 +2,11 @@
 Change history
 ==============
 
+0.1.3 (2023-12-12)
+==================
+
+* [#69] Fixed not being able to relate zaaktype and informatieobjecttypen anymore.
+
 0.1.2 (2023-11-08)
 ==================
 
