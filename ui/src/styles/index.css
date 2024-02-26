@@ -2,10 +2,7 @@
 @import './variables.css';
 @import './reset.css';
 
-html {
-  scrollbar-gutter: stable;
-}
-
-body {
-  padding-right: 0 !important ;
+html, body, #root {
+  margin: 0;
+  height: 100%;
 }

@@ -17,9 +17,10 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@jridgewell/sourcemap-codec": "^1.4.15",
-    "@mui/icons-material": "^5.14.3",
-    "@mui/material": "^5.14.5",
-    "@mui/styles": "^5.14.5",
+    "@maykin-ui/admin-ui": "^0.0.0",
+    "@mui/icons-material": "^5.15.0",
+    "@mui/material": "^5.15.0",
+    "@mui/styles": "^5.15.0",
     "@mui/x-data-grid": "^6.11.2",
     "@types/react-router-hash-link": "^2.4.6",
     "decamelize": "^6.0.0",
@@ -47,6 +48,9 @@
   "overrides": {
     "react-use": {
       "sourcemap-codec@1.4.8": "@jridgewell/sourcemap-codec"
+    },
+    "@mui/styles@": {
+      "react": "^18.0.0"
     }
   }
 }
