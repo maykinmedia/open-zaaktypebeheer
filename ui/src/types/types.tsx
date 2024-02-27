@@ -308,6 +308,7 @@ export type GetSiteTreeFunction = (
 export type SiteTreeOptions = SiteTreeOptionT[];
 
 export interface SiteTreeOptionT {
+  href?: string;
   label: string;
   Icon?: JSX.Element;
   onClick?: () => void;
