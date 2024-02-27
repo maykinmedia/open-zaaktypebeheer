@@ -1,28 +1,28 @@
-import LogoutIcon from '@mui/icons-material/Logout';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { GetSiteTreeFunction } from '../types/types';
+import {Outline} from "@maykin-ui/admin-ui/components";
 
 export const getSiteTree: GetSiteTreeFunction = (navigate, auth) => [
   {
     label: 'Zaaktypen',
-    Icon: <AppRegistrationIcon />,
+    Icon: <Outline.CubeTransparentIcon/>,
+    href: '/zaaktypen',
     onClick: () => navigate('/zaaktypen'),
   },
-  {
-    label: 'Documenttypen',
-    Icon: <AttachFileIcon />,
-    onClick: () => navigate('/documenttypen'),
-  },
+  // {
+  //   label: 'Documenttypen',
+  //   Icon: <Outline.PuzzlePieceIcon/>,
+  //   href: '/documenttypen',
+  //   onClick: () => navigate('/documenttypen'),
+  // },
   {
     label: 'Admin',
-    Icon: <AdminPanelSettingsIcon />,
+    Icon: <Outline.ShieldCheckIcon/>,
+    href: '/admin',
     onClick: () => navigate('/admin'),
   },
   {
     label: 'Log uit',
-    Icon: <LogoutIcon />,
+    Icon: <Outline.ArrowRightOnRectangleIcon/>,
     onClick: () => {
       auth.onSignOut();
     },
