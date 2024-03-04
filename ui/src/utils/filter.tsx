@@ -13,16 +13,28 @@ export function onQueryFilter(query: string, array: string[]) {
 }
 
 /**
- * Filter data by comparing an specified attribute value to the query.
+ * Filter data by comparing one or more attribute values to the query.
  * @param query string
  * @param data array of Zaaktype or InformationObject
- * @param attribute attribute of Zaaktype or InformationObject
+ * @param attributes attribute or attributes of Zaaktype or InformationObject
  * @returns filtered array
  */
-export function attributeOnQueryFilter<T>(query: string, data: T[], attribute: keyof T) {
+export function attributeOnQueryFilter<T>(
+  query: string,
+  data: T[],
+  attributes: keyof T | (keyof T)[]
+) {
   if (!data) return data;
   return data.filter((dataItem) => {
-    let valueFromAttribute = dataItem[attribute];
-    if (typeof valueFromAttribute === 'string') return partStringCompare(valueFromAttribute, query);
+    // Array of attributes
+    if (Array.isArray(attributes))
+      return attributes.find((attribute) => {
+        const value = dataItem[attribute];
+        return partStringCompare(String(value), query);
+      });
+
+    // Single attribute
+    const value = dataItem[attributes];
+    return partStringCompare(String(value), query);
   });
 }
