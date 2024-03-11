@@ -30,25 +30,25 @@ export default function LoginView() {
 
   return (
     <Login
-      nonFieldErrors={error?.message}
-      fields={[
-        {
-          autoComplete: 'username',
-          autoFocus: true,
-          label: 'Gebruikersnaam',
-          name: 'username',
-          required: true,
-        },
-        {
-          autoComplete: 'current-password',
-          label: 'Wachtwoord',
-          name: 'password',
-          required: true,
-          type: 'password',
-        },
-      ]}
-      secondaryActions={
-        config.oidcEnabled
+      formProps={{
+        nonFieldErrors: error?.message,
+        fields: [
+          {
+            autoComplete: 'username',
+            autoFocus: true,
+            label: 'Gebruikersnaam',
+            name: 'username',
+            required: true,
+          },
+          {
+            autoComplete: 'current-password',
+            label: 'Wachtwoord',
+            name: 'password',
+            required: true,
+            type: 'password',
+          },
+        ],
+        secondaryActions: config.oidcEnabled
           ? [
               {
                 href: getOidcLoginUrl(),
@@ -57,9 +57,9 @@ export default function LoginView() {
                 variant: 'transparent',
               },
             ]
-          : undefined
-      }
-      onSubmit={handleLogin}
+          : undefined,
+        onSubmit: handleLogin,
+      }}
     />
   );
 }
