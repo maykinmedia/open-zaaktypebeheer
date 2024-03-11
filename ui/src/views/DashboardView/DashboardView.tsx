@@ -7,10 +7,7 @@ import {uuidExtract} from '../../utils/extract';
 import {
     Body,
     ErrorMessage,
-    Form,
-    H1,
     Outline,
-    Toolbar,
 } from '@maykin-ui/admin-ui/components';
 import {AttributeData, Attribute} from '@maykin-ui/admin-ui/lib';
 import {List} from '@maykin-ui/admin-ui/templates';
@@ -85,58 +82,46 @@ const DashboardView = () => {
 
     return (
         <List
+            title={<>Zaaktypen&nbsp;{isLoading && <Outline.ArrowPathIcon spin={true} aria-label={'Bezig met laden'}/>}</>}
+            formProps={{
+                autoComplete: 'off',
+                fields: [
+                    {
+                        disabled: loadingCatalogi,
+                        defaultValue: 'all',
+                        label: 'Selecteer catalogus',
+                        options: selectOptions,
+                        value: selectedCatalogus,
+                        onChange: onCatalogusChange,
+                    },
+                    {
+                        label: 'Filter resultaten',
+                        placeholder: 'ZAAKTYPE-XXXX-XXXXXXXXXX',
+                        size: 24,
+                        value: query,
+                        onChange: (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value),
+                    },
+                ],
+                showActions: false,
+            }}
             fields={fields}
-            dataGridProps={{
-                loading: isLoading,
-                sort: true,
-                onClick: (_: React.MouseEvent, attributeData: AttributeData) => {
-                    navigate('/zaaktypen/' + uuidExtract(attributeData.url as string));
-                }
+            loading={isLoading}
+            sort={true}
+            onClick={(_: React.MouseEvent, attributeData: AttributeData) => {
+                navigate('/zaaktypen/' + uuidExtract(attributeData.url as string));
             }}
             objectList={filteredZaaktypen as unknown as AttributeData<Attribute>[]}
         >
-            <Body>
-                {errorCatalogi && (
-                    <ErrorMessage>
-                        Er is een fout opgetreden bij het ophalen van de catalogi. Probeer het opnieuw.
-                    </ErrorMessage>
-                )}
-                {errorZaaktypen && (
-                    <ErrorMessage>
-                        Er is een fout opgetreden bij het ophalen van de zaaktypen. Probeer het opnieuw.
-                    </ErrorMessage>
-                )}
-
-                <Toolbar align="space-between" variant="transparent">
-                    <H1>
-                        Zaaktypen&nbsp;
-                        {isLoading && <Outline.ArrowPathIcon spin={true} aria-label={'Bezig met laden'}/>}
-                    </H1>
-
-                    <Form
-                        autoComplete="off"
-                        direction="horizontal"
-                        showActions={false}
-                        fields={[
-                            {
-                                disabled: loadingCatalogi,
-                                defaultValue: 'all',
-                                label: 'Selecteer catalogus',
-                                options: selectOptions,
-                                value: selectedCatalogus,
-                                onChange: onCatalogusChange,
-                            },
-                            {
-                                label: 'Filter resultaten',
-                                placeholder: 'ZAAKTYPE-XXXX-XXXXXXXXXX',
-                                size: 24,
-                                value: query,
-                                onChange: (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value),
-                            },
-                        ]}
-                    />
-                </Toolbar>
-            </Body>
+            {errorCatalogi && (
+                <Body><ErrorMessage>
+                    Er is een fout opgetreden bij het ophalen van de catalogi. Probeer het opnieuw.
+                </ErrorMessage></Body>
+            )}
+            {errorZaaktypen && (
+                <Body><ErrorMessage>
+                    Er is een fout opgetreden bij het ophalen van de zaaktypen. Probeer het opnieuw.
+                </ErrorMessage></Body>
+            )}
         </List>
     );
 };
